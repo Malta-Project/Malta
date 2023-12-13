@@ -28,10 +28,10 @@ double Malta::integrate(double (*integrand)(double), int n, int n_step, int m) {
     // The f space shall be first restricted between 100 and -100
 
     Interval *intervals = new Interval[n];
-    long double *integrals = new long double[n_step];
-    long double *errors = new long double[n_step];
-    long double avg_integral;
-    long double avg_error;
+    double *integrals = new double[n_step];
+    double *errors = new double[n_step];
+    double avg_integral;
+    double avg_error;
     
 
 
@@ -61,18 +61,18 @@ double Malta::integrate(double (*integrand)(double), int n, int n_step, int m) {
             std::cout << "Error 1: Function out of range!" << std::endl;
             return 0.0;
         }
-        if else (y_th > 0 || y_th < y) {
+        else if (y_th > 0 || y_th < y) {
             intervals[randomInt].count++;
         }
-        if else (y_th < 0 || y_th < y) {
+        else if (y_th < 0 || y_th < y) {
             intervals[randomInt].count--;
         }
         intervals[randomInt].avg_f += abs(y_th);
     }
 
     // evalutation of the integral and of the error
-    long double integral = 0.0;
-    long double error = 0.0;
+    double integral = 0.0;
+    double error = 0.0;
     for (int i = 0; i < n; i++) {
         double s = intervals[i].count /(n * (intervals[i].right_border-intervals[i].left_border));
         integral += s;
@@ -89,7 +89,7 @@ double Malta::integrate(double (*integrand)(double), int n, int n_step, int m) {
     std::cout << "Estimated error:\t" << avg_error << std::endl;
 
     // Xi^2 Test
-    double chi = chi_square(integrals, errors, n_step);
+    double chi = chi_square(integrals, errors, n_step, avg_integral);
     std::cout << "Chi^2:\t" << chi << std::endl;
 
     //Set new borders
@@ -144,7 +144,7 @@ double Malta::integrate(double (*integrand)(double), int n, int n_step, int m) {
         }
 
         // The Monte-Carlo Step
-        for(int i = 0; i < m, i++) {
+        for(int i = 0; i < m; i++) {
             int randomInt = std::rand() % n;
             double x = intervals[randomInt].left_border + dis(gen) * (intervals[randomInt].right_border - intervals[randomInt].left_border);
             double y = dis(gen)/(float) n * 200 - 100;
@@ -248,7 +248,7 @@ double Malta::integrate(double (*integrand)(double), int n, int n_step, int m) {
     return avg_integral;
 }
 
-double Malta::chi_square(double *integrals, double *errors, int current_step, long double avg_integral) {
+double Malta::chi_square(double *integrals, double *errors, int current_step, double avg_integral) {
     // calculate the chi square
     double chi = 0;
     for (int i = 0; i<=current_step; i++) {
