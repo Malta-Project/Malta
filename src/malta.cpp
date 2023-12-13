@@ -36,7 +36,7 @@ double Malta::integrate(double (*integrand)(double), int n, int n_step, int m) {
 
 
 
-    // FIRST STEP
+    // FIRST STEP haha
 
     //initialize the borders
     double delta_n = 1.0 / (float) n;
