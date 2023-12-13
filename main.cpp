@@ -9,7 +9,7 @@ double integrand(double x) {
 
 int main() {
     Malta malta;
-    double result = malta.integrate(integrand);
+    double result = malta.integrate(integrand, 5, 20, 100);
     std::cout << "Endergebniss:\t" << result << std::endl;
     return 0;
 }

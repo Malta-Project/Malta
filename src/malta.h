@@ -9,7 +9,6 @@ class Malta {
     public:
         Malta();
         ~Malta();
-        double integrate(double (*integrand)(double));
         double integrate(double (*integrand)(double), int n, int n_step, int m);
 
     private:
