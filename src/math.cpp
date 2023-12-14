@@ -7,3 +7,5 @@ Math::Math() {
 Math::~Math() {
     // Destructor
 }
+
+// test
