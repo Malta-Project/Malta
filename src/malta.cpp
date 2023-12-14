@@ -7,9 +7,9 @@
 typedef struct Interval {
     double left_border;
     double right_border;
+    double f;
     double avg_f;
     double weight;
-    int count;
 } Interval;
 
 Malta::Malta() {
@@ -36,14 +36,14 @@ double Malta::integrate(double (*integrand)(double), int n, int n_step, int m) {
 
 
 
-    // FIRST STEP haha
+    // FIRST STEP
 
     //initialize the borders
     double delta_n = 1.0 / (float) n;
-    for (int i = 0; i < n; n++) {
+    for (int i = 0; i < n; i++) {
         intervals[i].left_border = i*delta_n;
         intervals[i].right_border = i*delta_n + delta_n;
-        intervals[i].count = 0;
+        intervals[i].f = 0.0;
         intervals[i].weight;
         intervals[i].avg_f = 0.0;
     }
@@ -55,29 +55,24 @@ double Malta::integrate(double (*integrand)(double), int n, int n_step, int m) {
     for(int i = 0; i < m; i++) {
         int randomInt = std::rand() % n;
         double x = intervals[randomInt].left_border + dis(gen) * (intervals[randomInt].right_border - intervals[randomInt].left_border);
-        double y = dis(gen)/(float) n * 200 - 100;
-        double y_th = integrand(x);
-        if (y_th > 100 || y_th < -100) {
+        double y = integrand(x);
+        if (y > 100 || y < -100) {
             std::cout << "Error 1: Function out of range!" << std::endl;
             return 0.0;
         }
-        else if (y_th > 0 || y_th < y) {
-            intervals[randomInt].count++;
-        }
-        else if (y_th < 0 || y_th < y) {
-            intervals[randomInt].count--;
-        }
-        intervals[randomInt].avg_f += abs(y_th);
+        intervals[randomInt].f += y;
+        intervals[randomInt].avg_f += abs(y);
     }
 
     // evalutation of the integral and of the error
     double integral = 0.0;
     double error = 0.0;
     for (int i = 0; i < n; i++) {
-        double s = intervals[i].count /(n * (intervals[i].right_border-intervals[i].left_border));
+        double s = intervals[i].f *(n * (intervals[i].right_border-intervals[i].left_border));
         integral += s;
-        error += s*s - integral;
-    } 
+        error += s*s;
+    }
+    error -= integral*integral;
     integral /= (float)m;
     error /= (float)(m*(m-1));
     //append the integrals and errors
@@ -85,25 +80,20 @@ double Malta::integrate(double (*integrand)(double), int n, int n_step, int m) {
     errors[0] = error;
     avg_integral = integral;
     avg_error = error;
-    std::cout << "End of first iteration. Integral:\t" << avg_integral << std::endl;
+    std::cout << "------------------------------------------------------------" << std::endl;
+    std::cout << "End of first iteration. Integral:\t" << avg_integral << std::endl << std::endl;
     std::cout << "Estimated error:\t" << avg_error << std::endl;
-
-    // Xi^2 Test
-    double chi = chi_square(integrals, errors, n_step, avg_integral);
-    std::cout << "Chi^2:\t" << chi << std::endl;
 
     //Set new borders
 
     double total_weight = 0;
+    double weight_factor = 0.0;
     for (int i=0 ; i<n; i++) {
-        double tmp_sum = 0.0;
-        for (int j=0; j<n; j++) {
-            if (i != j) {
-                tmp_sum += intervals[j].avg_f * (intervals[j].right_border-intervals[j].left_border);
-            }
-        }
-        intervals[i].weight = intervals[i].avg_f * (intervals[i].right_border-intervals[i].left_border) / tmp_sum;
-        intervals[i].weight = pow((((intervals[i].weight) -1)/log(intervals[i].weight)), 1.42);
+        weight_factor += intervals[i].avg_f * (intervals[i].right_border-intervals[i].left_border);
+    }
+    for (int i=0 ; i<n; i++) {
+        intervals[i].weight = intervals[i].avg_f * (intervals[i].right_border-intervals[i].left_border) / weight_factor;
+        intervals[i].weight = pow((((intervals[i].weight) -1)/log(intervals[i].weight)), 1.42); // damping!
         total_weight += intervals[i].weight;
     }
 
@@ -138,8 +128,8 @@ double Malta::integrate(double (*integrand)(double), int n, int n_step, int m) {
     for (int k = 1; k<n_step; k++) {    
 
         // Preparing the intervals for iterations
-        for (int i = 0; i < n; n++) {
-            intervals[i].count = 0;
+        for (int i = 0; i < n; i++) {
+            intervals[i].f = 0.0;
             intervals[i].avg_f = 0.0;
         }
 
@@ -147,30 +137,25 @@ double Malta::integrate(double (*integrand)(double), int n, int n_step, int m) {
         for(int i = 0; i < m; i++) {
             int randomInt = std::rand() % n;
             double x = intervals[randomInt].left_border + dis(gen) * (intervals[randomInt].right_border - intervals[randomInt].left_border);
-            double y = dis(gen)/(float) n * 200 - 100;
-            double y_th = integrand(x);
-            if (y_th > 100 || y_th < -100) {
+            double y = integrand(x);
+            if (y > 100 || y < -100) {
                 std::cout << "Error 1: Function out of range!" << std::endl;
                 return 0.0;
             }
-            else if (y_th > 0 || y_th < y) {
-                intervals[randomInt].count++;
-            }
-            else if (y_th < 0 || y_th < y) {
-                intervals[randomInt].count--;
-            }
-            intervals[randomInt].avg_f += abs(y_th);
+            intervals[randomInt].f += y;
+            intervals[randomInt].avg_f += abs(y);
         }
 
 
         // evalutation of the integral and of the error
-        integral = 0.0;
-        error = 0.0;
+        double integral = 0.0;
+        double error = 0.0;
         for (int i = 0; i < n; i++) {
-            double s = intervals[i].count /(n * (intervals[i].right_border-intervals[i].left_border));
+            double s = intervals[i].f *(n * (intervals[i].right_border-intervals[i].left_border));
             integral += s;
-            error += s*s - integral;
-        } 
+            error += s*s;
+        }
+        error -= integral*integral/m;
         integral /= (float)m;
         error /= (float)(m*(m-1));
         //append the integrals and errors
@@ -180,35 +165,34 @@ double Malta::integrate(double (*integrand)(double), int n, int n_step, int m) {
         //calculate the avg_error (more complicated than for the first step)
         avg_error = 0.0;
         for (int i = 0; i<=k; i++) {
-            avg_error += 1/(errors[i]*errors[i]);
+            avg_error += 1/(errors[i]);
         }
-        avg_error = 1/sqrt(avg_error);
+        avg_error = 1/(avg_error);
 
         //calculate the avg_integral (more complicated than for the first step)
         avg_integral = 0.0;
         for (int i = 0; i<=k; i++) {
-            avg_integral += integrals[i]/errors[i];
+            avg_integral += integrals[i]/(errors[i]);
         }
-        avg_integral *= avg_error*avg_error;
-        std::cout << "End of first iteration. Integral:\t" << avg_integral << std::endl;
-        std::cout << "Estimated error:\t" << avg_error << std::endl;
+        avg_integral *= avg_error;
+        std::cout << "------------------------------------------------------------" << std::endl;
+        std::cout << "End of " << k+1 << "-th Iteration.\n\nIntegral:\t" << avg_integral << std::endl << std::endl;
+        std::cout << "Estimated error:\t" << avg_error << std::endl << std::endl;
 
         // Xi^2 Test
-        double chi = chi_square(integrals, errors, n_step, avg_integral);
-        std::cout << "Chi^2:\t" << chi << std::endl;
+        double chi = chi_square(integrals, errors, k, avg_integral);
+        std::cout << "Chi^2:\t" << chi << std::endl << std::endl;
 
         //Set new borders
 
         double total_weight = 0;
+        double weight_factor = 0.0;
         for (int i=0 ; i<n; i++) {
-            double tmp_sum = 0.0;
-            for (int j=0; j<n; j++) {
-                if (i != j) {
-                    tmp_sum += intervals[j].avg_f * (intervals[j].right_border-intervals[j].left_border);
-                }
-            }
-            intervals[i].weight = intervals[i].avg_f * (intervals[i].right_border-intervals[i].left_border) / tmp_sum;
-            intervals[i].weight = pow((((intervals[i].weight) -1)/log(intervals[i].weight)), 1.42);
+            weight_factor += intervals[i].avg_f * (intervals[i].right_border-intervals[i].left_border);
+        }
+        for (int i=0 ; i<n; i++) {
+            intervals[i].weight = intervals[i].avg_f * (intervals[i].right_border-intervals[i].left_border) / weight_factor;
+            //intervals[i].weight = pow((((intervals[i].weight) -1)/log(intervals[i].weight)), 1.42); // damping!
             total_weight += intervals[i].weight;
         }
 
@@ -251,7 +235,7 @@ double Malta::integrate(double (*integrand)(double), int n, int n_step, int m) {
 double Malta::chi_square(double *integrals, double *errors, int current_step, double avg_integral) {
     // calculate the chi square
     double chi = 0;
-    for (int i = 0; i<=current_step; i++) {
+    for (int i = 1; i<=current_step; i++) {
         chi += (integrals[i]-avg_integral)*(integrals[i]-avg_integral)/(errors[i]*errors[i]);
     }
     return chi;
