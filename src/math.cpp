@@ -8,4 +8,3 @@ Math::~Math() {
     // Destructor
 }
 
-// test
