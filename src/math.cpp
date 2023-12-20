@@ -1,4 +1,4 @@
-#include "math.h"
+#include "malta_math.h"
 #include <cstdlib>
 
 std::vector<int> *Math::get_random_points(int lower_limit, int upper_limit, int N) { //limts inclusive

@@ -22,9 +22,9 @@ class Malta {
         int N_points;
         int i_iteration;
         int max_iterations;
-        int K = 1000;
+        int K;
         double S_2;
-        double delta_sigma_break = 1e-3;
+        double delta_sigma_break;
         std::vector<double> intervals;
         std::vector<double> points;
         std::vector<double> dx_i;

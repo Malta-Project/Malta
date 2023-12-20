@@ -1,16 +1,18 @@
-#include "malta.h"
-#include "math.h"
 #include <cstdlib>
 #include <ctime>
 #include <iostream>
 #include <cmath>
 #include <bits/stdc++.h>
+#include "malta.h"
+#include "malta_math.h"
 
 Malta::Malta(int N_points, int N_intervals, int max_iterations) {
     this->N_points = N_points;
     this->N_intervals = N_intervals;
     this->max_iterations = max_iterations;
     srand(time(NULL));
+    this->K = 1000;
+    this->delta_sigma_break = 1e-3;
 }
 
 Malta::~Malta() {
@@ -49,9 +51,9 @@ double Malta::integrate(double (*integrand)(double)) {
 }
 
 double Malta::integrate(double (*integrand)(double), double lower_limit, double upper_limit) {
-    auto new_integrand = [lower_limit, upper_limit, integrand](double x) {
+    /*auto new_integrand = [lower_limit, upper_limit, integrand](double x) {
         return integrand(x * (upper_limit - lower_limit) + lower_limit) * (upper_limit-lower_limit);
-    };
+    };*/
     //return this->integrate(new_integrand);
 }
 
@@ -88,9 +90,11 @@ void Malta::alter_intervals() {
      */
     double new_dx = 0.0;
     int interval_ix = 0;
+    int mi_index = 0;
     for(int i=0; i<all_subintervals; i++) {
-        new_dx += this->mi_width[interval_ix];
-        if(i % new_N_subintervals == 0) {
+        new_dx += this->mi_width[mi_index];
+        if(i>=mi[interval_ix]) mi_index++;
+        if(i % new_N_subintervals == 0 && i != 0) {
             this->dx_i[interval_ix] = new_dx;
             interval_ix++;
             this->intervals[interval_ix+1] = this->intervals[interval_ix] + new_dx; 
@@ -153,13 +157,15 @@ void Malta::sample_points() {
     this->points = std::vector<double>(this->N_points);
     std::vector<int>* interval_ixs = Math::get_random_points(1, this->N_intervals, this->N_points);
     std::sort(interval_ixs->begin(), interval_ixs->end());
+    int i=0;
     for(auto &ix : *interval_ixs) {
         double interval_lower = this->intervals[ix-1];
         double interval_upper = this->intervals[ix];
         double point = Math::get_random_point(interval_lower, interval_upper);
         //std::cout << "point" << point << std::endl;
         //std::cout << ix << std::endl;
-        this->points[ix] = point;
+        this->points[i] = point;
+        i++;
     }
     delete interval_ixs;
 }
