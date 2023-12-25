@@ -33,7 +33,7 @@ class Malta {
         std::vector<double> sigma_result;
         std::vector<double> integral_result;
         std::vector<double> chi_2_dof;
-        std::vector<int> mi;
+        std::vector<double> mi;
         std::vector<double> mi_width;
         void sample_points();
         void calculate_integral(double (*integrand)(double));

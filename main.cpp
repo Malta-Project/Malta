@@ -7,11 +7,11 @@
 using namespace std;
 
 double integrand(double x) {
-    return x * x;
+    return x * x * x;
 }
 
 int main() {
-    Malta malta = Malta(1000, 10, 100);
+    Malta malta = Malta(1000, 10, 1000);
     malta.integrate(&integrand);
     cout << malta.get_results() << endl;
     return 0;
