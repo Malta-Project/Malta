@@ -32,3 +32,6 @@
 *.app
 
 test.ipynb
+
+.vscode
+*.bat
