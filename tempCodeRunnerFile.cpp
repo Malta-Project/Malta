@@ -1,0 +1,1 @@
+g++ main.cpp src/malta.cpp -o malta
