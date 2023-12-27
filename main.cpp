@@ -1,19 +1,23 @@
+#ifndef MAIN_CPP
+#define MAIN_CPP
+
 #include <iostream>
 #include "src/malta.h"
-#include <cmath>
+#include "src/malta_math.h"
 
-//Compile with g++ main.cpp src/malta.cpp -o malta
+using namespace std;
 
 double integrand(double x) {
     return x * x;
-    //return x *x * x;
-    //return exp(x);
-    //return log(x);
 }
 
 int main() {
-    Malta malta;
-    double result = malta.integrate(integrand, 20, 42, 10000);
-    std::cout << "Endergebnis:\t" << result << std::endl;
+    Malta malta = Malta(1000, 10, 100);
+    malta.integrate(&integrand);
+    cout << malta.get_results() << endl;
     return 0;
 }
+
+//g++.exe -o main.exe src/math.cpp src/malta.cpp main.cpp -I "C:\Users\nabil\OneDrive\Dokumente\Uni\Module\5. Semester\CiS Projekt\Malta\src"
+//Compile on Linux with g++ main.cpp src/malta.cpp src/math.cpp -o malta
+#endif

@@ -1,5 +1,5 @@
-#ifndef MATH_H
-#define MATH_H
+#ifndef MATH_OLD_H
+#define MATH_OLD_H
 
 class Math {
     public:

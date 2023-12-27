@@ -1,18 +1,51 @@
 #ifndef MALTA_H
 #define MALTA_H
 
-#include "math.h"
-
-
+#include <vector>
 
 class Malta {
     public:
-        Malta();
+        Malta(int N_points, int N_intervals, int max_iterations);
         ~Malta();
-        double integrate(double (*integrand)(double), int n, int n_step, int m);
-
+        void integrate(double (*integrand)(double));
+        //double integrate(double (*integrand)(double), double lower_limit, double upper_limit);
+        void set_N_intervals(int N_intervals);
+        int get_N_intervals();
+        void set_N_points(int N_points);
+        int get_N_points();
+        void set_seed(int seed);
+        double get_results();
+        void set_K(int K);
+        int get_K();
     private:
-        double chi_square(double *integrals, double *errors, int current_step, double avg_integral);
+        int N_intervals;
+        int N_points;
+        int i_iteration;
+        int max_iterations;
+        int K;
+        double S_2;
+        double delta_sigma_break;
+        double total_weight;
+        std::vector<double> interval_borders;
+        std::vector<double> interval_values;
+        std::vector<double> interval_abs_values;
+        std::vector<double> interval_weights;
+        std::vector<double> points;
+        std::vector<double> dx_i;
+        std::vector<double> sigma_iterations;
+        std::vector<double> integral_iterations;
+        std::vector<double> sigma_result;
+        std::vector<double> integral_result;
+        std::vector<double> chi_2_dof;
+        std::vector<double> mi;
+        std::vector<double> mi_width;
+        //void sample_points();
+        void montecarlo(double (*integrand)(double));
+        void calculate_integral();
+        // double p(double x);
+        void calculate_erros();
+        void calculate_mi();
+        void alter_intervals();
 };
 
 #endif
