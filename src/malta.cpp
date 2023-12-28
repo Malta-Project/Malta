@@ -67,10 +67,10 @@ void Malta::calculate_mi() {
     this->total_weight = 0;
     double weight_factor = 0.0;
     for (int i=0 ; i<this->N_intervals; i++) {
-        weight_factor += this->interval_abs_values[i] * (this->interval_borders[i]+ this->dx_i[i]);
+        weight_factor += this->interval_abs_values[i] * this->dx_i[i];
     }
     for (int i=0 ; i<this->N_intervals; i++) {
-        this->interval_weights[i] = this->interval_abs_values[i] * (this->interval_borders[i]+ this->dx_i[i]) / weight_factor;
+        this->interval_weights[i] = this->interval_abs_values[i] * this->dx_i[i] / weight_factor;
         //this->interval_weights[i] = pow((((this->interval_weights[i]) -1)/log(this->interval_weights[i])), 1.42); // damping is used for... ähm...
         this->total_weight += this->interval_weights[i];
     }
@@ -87,11 +87,16 @@ void Malta::alter_intervals() {
         if (delta > weight_per_interval) {
             while (delta > weight_per_interval) {
                 delta -= weight_per_interval;
-                this->interval_borders[interval_idx+1] = this->interval_borders[interval_idx+1] - this->dx_i[interval_idx] * delta / this->interval_weights[interval_idx];
+                this->interval_borders[interval_idx+1] = this->interval_borders[i+1] - this->dx_i[i] * delta / this->interval_weights[i];
                 interval_idx++;
             }
         }
     }
+    //Por debugging
+    for (int i = 0; i <= this->N_intervals; i++) {
+        std::cout << "Borders: " << this->interval_borders[i] << std::endl;
+    }
+
     // We recalculate the dx
     for (int i = 0; i < this->N_intervals; i++) {
         this->dx_i[i] = this->interval_borders[i + 1] - this->interval_borders[i];
@@ -102,7 +107,7 @@ void Malta::alter_intervals() {
         double integral = 0.0;
         this->S_2 = 0.0;
         for (int i = 0; i < this->N_intervals; i++) {
-            double val = this->interval_values[i] / this->dx_i[i];
+            double val = this->interval_values[i] * this->dx_i[i] * this->N_intervals;
             integral += val;
             S_2 += val * val;
         }

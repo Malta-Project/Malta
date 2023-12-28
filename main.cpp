@@ -12,7 +12,7 @@ double integrand(double x) {
 }
 
 int main() {
-    Malta malta = Malta(1000, 10, 100);
+    Malta malta = Malta(5000, 10, 10);
     malta.integrate(&integrand);
     cout << malta.get_results() << endl;
     return 0;
