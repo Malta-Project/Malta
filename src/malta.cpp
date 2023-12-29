@@ -173,7 +173,7 @@ void Malta::montecarlo(double (*integrand)(double)) {
     double x, y;
     for (int i = 0; i < this->N_points; i++) {
         interval_idx = Math::get_random_point(0, this->N_intervals-1);
-        x = this->interval_borders[interval_idx] + Math::get_random_point(this->interval_borders[interval_idx], this->interval_borders[interval_idx+1]);
+        x = Math::get_random_point(this->interval_borders[interval_idx], this->interval_borders[interval_idx+1]);
         y = integrand(x);
         this->interval_values[interval_idx] += y; //We do not check for singularities
         this->interval_abs_values[interval_idx] += Math::abs(y);
