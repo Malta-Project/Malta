@@ -2,29 +2,28 @@
 #define MALTA_H
 
 #include <vector>
+#include <functional>
 
+using IntgFn = std::function<double(double)>;
 class Malta {
     public:
         Malta(int N_points, int N_intervals, int max_iterations);
         ~Malta();
-        double integrate(double (*integrand)(double));
-        double integrate(double (*integrand)(double), double lower_limit, double upper_limit);
+        double integrate(IntgFn integrand);
+        double integrate(IntgFn integrand, double lower_limit, double upper_limit);
         void set_N_intervals(int N_intervals);
         int get_N_intervals();
         void set_N_points(int N_points);
         int get_N_points();
         void set_seed(int seed);
         double get_results();
-        void set_K(int K);
-        int get_K();
     private:
         int N_intervals;
         int N_points;
         int i_iteration;
         int max_iterations;
-        int K;
         double S_2;
-        double delta_sigma_break;
+        double delta_sigma_break = 1e-6;
         std::vector<double> intervals;
         std::vector<double> points;
         std::vector<double> dx_i;
@@ -36,10 +35,10 @@ class Malta {
         std::vector<double> mi;
         std::vector<double> mi_width;
         void sample_points();
-        void calculate_integral(double (*integrand)(double));
+        void calculate_integral(IntgFn);
         double p(double x);
         void calculate_erros();
-        void calculate_mi(double (*integrand)(double));
+        void calculate_mi(IntgFn);
         void alter_intervals();
 };
 

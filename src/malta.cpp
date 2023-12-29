@@ -6,20 +6,18 @@
 #include "malta.h"
 #include "malta_math.h"
 
-Malta::Malta(int N_points, int N_intervals, int max_iterations) {
-    this->N_points = N_points;
-    this->N_intervals = N_intervals;
-    this->max_iterations = max_iterations;
+Malta::Malta(int N_points, int N_intervals, int max_iterations) : 
+N_points{N_points},
+N_intervals{N_intervals},
+max_iterations{max_iterations} {
     srand(time(NULL));
-    this->K = 1000;
-    this->delta_sigma_break = 1e-6;
 }
 
 Malta::~Malta() {
     // Destructor
 }
 
-double Malta::integrate(double (*integrand)(double)) {
+double Malta::integrate(IntgFn integrand) {
     this->sigma_iterations = std::vector<double>();
     this->integral_iterations = std::vector<double>();
     this->sigma_result = std::vector<double>();
@@ -49,14 +47,13 @@ double Malta::integrate(double (*integrand)(double)) {
     }
 }
 
-double Malta::integrate(double (*integrand)(double), double lower_limit, double upper_limit) {
-    /* double (new_integrand)(double)  = [lower_limit, upper_limit, integrand](double x) {
+double Malta::integrate(IntgFn integrand, double lower_limit, double upper_limit) {
+    return integrate([integrand, lower_limit, upper_limit](double x) -> double {
         return integrand(x * (upper_limit - lower_limit) + lower_limit) * (upper_limit-lower_limit);
-    };
-    return this->integrate(&new_integrand); */
+    });
 }
 
-void Malta::calculate_mi(double (*integrand)(double)) {
+void Malta::calculate_mi(IntgFn integrand) {
     std::vector<double> fi(this->N_intervals, 0.0);
     this->mi = std::vector<double>(this->N_intervals);
     this->mi_width = std::vector<double>(this->N_intervals);
@@ -73,9 +70,12 @@ void Malta::calculate_mi(double (*integrand)(double)) {
     for(int i=0; i<this->N_intervals; i++) {
         norm_factor += fi[i] * this->dx_i[i];
     }
+    double damping_factor = 1.42;
     for(int i=0; i<this->N_intervals; i++) {
-        this->mi[i] = fi[i] * dx_i[i] / norm_factor;
+        double mi = fi[i] * dx_i[i] / norm_factor;
+        this->mi[i] = std::pow((mi-1)/std::log(mi+1e-8), damping_factor);
         this->mi_width[i] = this->dx_i[i] / this->mi[i];
+
     }
 }
 
@@ -101,7 +101,7 @@ void Malta::alter_intervals() {
     }
 }
 
-void Malta::calculate_integral(double (*integrand)(double)) {
+void Malta::calculate_integral(IntgFn integrand) {
     double I = 0.0;
     this->S_2 = 0.0;
     for (int i = 0; i < this->N_points; i++) {
@@ -182,12 +182,4 @@ int Malta::get_N_intervals() {
 
 double Malta::get_results() {
     return this->integral_iterations[this->i_iteration];
-}
-
-void Malta::set_K(int K) {
-    this->K = K;
-}
-
-int Malta::get_K() {
-    return this->K;
 }

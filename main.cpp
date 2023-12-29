@@ -11,12 +11,10 @@ double integrand(double x) {
 }
 
 int main() {
-    Malta malta = Malta(1000, 10, 100);
-    malta.integrate(&integrand);
-    cout << malta.get_results() << endl;
+    Malta malta = Malta(2000, 100, 200);
+    malta.integrate(integrand, 0, 2);
+    cout << "the result is I=" << malta.get_results() << endl;
     return 0;
 }
-
-//g++.exe -o main.exe src/math.cpp src/malta.cpp main.cpp -I "C:\Users\nabil\OneDrive\Dokumente\Uni\Module\5. Semester\CiS Projekt\Malta\src"
 
 #endif
