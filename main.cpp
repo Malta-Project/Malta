@@ -11,8 +11,8 @@ double integrand(double x) {
 }
 
 int main() {
-    Malta malta = Malta(2000, 100, 200);
-    malta.integrate(integrand, 0, 2);
+    Malta malta = Malta(200, 5, 200);
+    malta.integrate(integrand, 0, 1);
     cout << "the result is I=" << malta.get_results() << endl;
     return 0;
 }

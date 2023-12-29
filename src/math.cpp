@@ -21,6 +21,10 @@ double Math::get_random_point(double lower_limit, double upper_limit) {
     return ((double) rand()) / RAND_MAX * (upper_limit - lower_limit) + lower_limit;
 }
 
+int Math::get_random_point(int lower_limit, int upper_limit) { //limts inclusive
+    return rand() % (upper_limit - lower_limit + 1) + lower_limit;
+}
+
 double Math::abs(double x) {
     return x < 0 ? -x : x;
 }
