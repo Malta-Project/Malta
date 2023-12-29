@@ -12,15 +12,13 @@ double integrand(double x) {
 }
 
 int main() {
-    Malta malta = Malta(10000, 50, 100);
+    Malta malta = Malta(10000, 50, 1000);
     std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
-    malta.integrate(&integrand);
+    malta.integrate(integrand, 0, 1);
     std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
-    cout << malta.get_results() << endl;
-    std::cout << "calculation time = " << std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << "[ms]" << std::endl;
+    cout << "the result is I=" << malta.get_results() << endl;
+    std::cout << "Integration time = " << std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << "[ms]" << std::endl;
     return 0;
 }
-
-//g++.exe -o main.exe src/math.cpp src/malta.cpp main.cpp -I "C:\Users\nabil\OneDrive\Dokumente\Uni\Module\5. Semester\CiS Projekt\Malta\src"
 
 #endif
