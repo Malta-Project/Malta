@@ -136,7 +136,6 @@ void Malta::sample_points(IntgFn integrand) {
     std::fill(this->function_values_abs.begin(), this->function_values_abs.end(), 0.0);
     std::vector<int> *interval_ixs = Math::get_random_points(0, this->N_intervals-1, this->N_points);
     for(int &interval_ix : *interval_ixs) {
-        interval_ix = Math::get_random_point(0, this->N_intervals-1);
         x = Math::get_random_point(this->intervals[interval_ix], this->intervals[interval_ix+1]);
         y = integrand(x);
         this->function_values[interval_ix] += y;
