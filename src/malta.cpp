@@ -131,11 +131,11 @@ void Malta::calculate_errors() {
 
 void Malta::sample_points(IntgFn integrand) {
     double x, y;
-    int interval_ix;
     std::fill(this->function_values.begin(), this->function_values.end(), 0.0);
     std::fill(this->function_values_sq.begin(), this->function_values_sq.end(), 0.0);
     std::fill(this->function_values_abs.begin(), this->function_values_abs.end(), 0.0);
-    for(int i=0; i<this->N_points; i++) {
+    std::vector<int> *interval_ixs = Math::get_random_points(0, this->N_intervals-1, this->N_points);
+    for(int &interval_ix : *interval_ixs) {
         interval_ix = Math::get_random_point(0, this->N_intervals-1);
         x = Math::get_random_point(this->intervals[interval_ix], this->intervals[interval_ix+1]);
         y = integrand(x);
@@ -143,6 +143,7 @@ void Malta::sample_points(IntgFn integrand) {
         this->function_values_sq[interval_ix] += y*y;
         this->function_values_abs[interval_ix] += Math::abs(y);
     }
+    delete interval_ixs;
 }
 
 

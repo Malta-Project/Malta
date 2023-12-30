@@ -17,7 +17,7 @@ int main() {
     malta.integrate(integrand, 0, 1);
     std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
     cout << "the result is I=" << malta.get_results() << endl;
-    std::cout << "Integration time = " << std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << "[ms]" << std::endl;
+    std::cout << "Integration time = " << std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << " [ms]" << std::endl;
     return 0;
 }
 
