@@ -4,12 +4,12 @@
 #include <vector>
 #include <functional>
 
-using IntgFn = std::function<double(double)>;
+using IntgFn = std::function<double(std::vector<double>)>;
 class Malta {
     public:
-        Malta(int N_points, int N_intervals, int max_iterations);
+        Malta(int dimensions, int N_points, int N_intervals, int max_iterations);
         double integrate(IntgFn integrand);
-        double integrate(IntgFn integrand, double lower_limit, double upper_limit);
+        double integrate(IntgFn integrand, std::vector<std::pair<double, double>> limits);
         void set_N_intervals(int N_intervals);
         int get_N_intervals();
         void set_N_points(int N_points);
@@ -17,6 +17,7 @@ class Malta {
         void set_seed(int seed);
         double get_results();
     private:
+        int dimensions;
         int N_intervals;
         int N_points;
         int i_iteration;

@@ -6,7 +6,8 @@
 #include "malta.h"
 #include "malta_math.h"
 
-Malta::Malta(int N_points, int N_intervals, int max_iterations) : 
+Malta::Malta(int dimensions, int N_points, int N_intervals, int max_iterations) : 
+dimensions{dimensions},
 N_points{N_points},
 N_intervals{N_intervals},
 max_iterations{max_iterations} {
@@ -46,9 +47,11 @@ double Malta::integrate(IntgFn integrand) {
     }
 }
 
-double Malta::integrate(IntgFn integrand, double lower_limit, double upper_limit) {
-    return integrate([integrand, lower_limit, upper_limit](double x) -> double {
-        return integrand(x * (upper_limit - lower_limit) + lower_limit) * (upper_limit-lower_limit);
+double Malta::integrate(IntgFn integrand, std::vector<std::pair<double, double>> limits) {
+    return integrate([integrand, limits](std::vector<double> x) -> double {
+        return integrand({
+            x[0] * (limits[0].second - limits[0].first) + limits[0].first
+        }) * (limits[0].second-limits[0].first);
     });
 }
 
@@ -137,7 +140,7 @@ void Malta::sample_points(IntgFn integrand) {
     std::vector<int> *interval_ixs = Math::get_random_points(0, this->N_intervals-1, this->N_points);
     for(int &interval_ix : *interval_ixs) {
         x = Math::get_random_point(this->intervals[interval_ix], this->intervals[interval_ix+1]);
-        y = integrand(x);
+        y = integrand({x});
         this->function_values[interval_ix] += y;
         this->function_values_sq[interval_ix] += y*y;
         this->function_values_abs[interval_ix] += Math::abs(y);
