@@ -143,6 +143,7 @@ void Malta::sample_points(IntgFn integrand) {
         this->function_values_sq[interval_ix] += y*y;
         this->function_values_abs[interval_ix] += Math::abs(y);
     }
+    delete interval_ixs;
 }
 
 
