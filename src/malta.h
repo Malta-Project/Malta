@@ -15,7 +15,8 @@ class Malta {
         void set_N_points(int N_points);
         int get_N_points();
         void set_seed(int seed);
-        double get_results();
+        double get_result();
+        double get_error();
     private:
         int dimensions;
         int N_intervals;
@@ -25,9 +26,8 @@ class Malta {
         double S_2;
         double delta_sigma_break = 1e-6;
         double avg_mi;
-        std::vector<double> intervals;
-        std::vector<double> points;
-        std::vector<double> dx_i;
+        std::vector<std::vector<double>> intervals;
+        std::vector<std::vector<double>> dx_ij;
         std::vector<double> sigma_iterations;
         std::vector<double> integral_iterations;
         std::vector<double> sigma_result;
@@ -38,6 +38,7 @@ class Malta {
         std::vector<double> function_values;
         std::vector<double> function_values_sq;
         std::vector<double> function_values_abs;
+        std::vector<double> p_x;
         void sample_points(IntgFn integrand);
         void calculate_integral();
         void calculate_errors();
