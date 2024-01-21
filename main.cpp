@@ -12,7 +12,7 @@ double integrand(std::vector<double> x) {
 }
 
 int main() {
-    Malta malta = Malta(1, 1000, 100, 100);
+    Malta malta = Malta(1, 10000, 1000, 100);
     std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
     //malta.integrate(integrand, {{0.0, 1.0}});
     malta.integrate(integrand);

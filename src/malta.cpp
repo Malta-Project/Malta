@@ -15,19 +15,21 @@ max_iterations{max_iterations} {
 }
 
 double Malta::integrate(IntgFn integrand) {
-    this->sigma_iterations = std::vector<double>();
-    this->integral_iterations = std::vector<double>();
-    this->sigma_result = std::vector<double>();
-    this->integral_result = std::vector<double>();
-    this->chi_2_dof = std::vector<double>();
+    this->sigma_iterations = vec1d();
+    this->integral_iterations = vec1d();
+    this->sigma_result = vec1d();
+    this->integral_result = vec1d();
+    this->chi_2_dof = vec1d();
     this->i_iteration = 0;
-    this->intervals = std::vector<std::vector<double>>(this->dimensions, std::vector<double>(this->N_intervals+1));
-    this->function_values = std::vector<double>(this->N_points);
-    this->function_values_sq = std::vector<double>(this->N_points);
-    this->function_values_abs = std::vector<double>(this->N_points);
-    this->p_x = std::vector<double>(this->N_points);
+    this->intervals = vec2d(this->dimensions, vec1d(this->N_intervals+1));
+    this->function_values = vec1d(this->N_points);
+    this->p_x = vec1d(this->N_points);
+    this->p_ij_inv = vec2d(this->dimensions, vec1d(this->N_points));
+    this->points_x = vec2d(this->N_points, vec1d(this->dimensions));
+    this->m_ij = vec2d(this->dimensions, vec1d(this->N_intervals));
+    this->avg_m_ij = vec1d(this->dimensions);
     double dx = 1.0 / this->N_intervals;
-    this->dx_ij = std::vector<std::vector<double>>(this->dimensions, std::vector<double>(this->N_intervals, dx));
+    this->dx_ij = vec2d(this->dimensions, vec1d(this->N_intervals, dx));
     for (int i=0; i<this->dimensions; i++) {
         for(int j=0; j<=this->N_intervals; j++) {
             this->intervals[i][j] = dx * j;
@@ -38,7 +40,7 @@ double Malta::integrate(IntgFn integrand) {
     this->calculate_errors();
     for(int i=1; i<=this->max_iterations; i++) {
         this->i_iteration = i;
-        this->calculate_mi();
+        this->calculate_mij();
         this->alter_intervals();
         this->sample_points(integrand);
         this->calculate_integral();
@@ -58,22 +60,49 @@ double Malta::integrate(IntgFn integrand, std::vector<std::pair<double, double>>
     });
 }
 
-void Malta::calculate_mi() {
-    double total_weight = 0.0;
-    this->mi = std::vector<double>(this->N_intervals);
-    this->avg_mi = 0.0;
-    for(int i=0; i<this->N_intervals; i++) {
-        total_weight += this->function_values_abs[i] * this->dx_ij[0][i];
+void Malta::calculate_mij() {
+    vec2d f_ij(this->dimensions, vec1d(this->N_intervals));
+    std::vector<int> selected_points = std::vector<int>();
+    double sum_1, prd_2, sum_3, sum_4, norm_val, m_ij, avg_m_ij;
+    for(int i=0; i<this->dimensions; i++) {
+        for(int j=0; j<this->N_intervals; j++) {
+            for(int k=0; k<this->N_points; k++) {
+                if(this->points_x[k][i] < this->intervals[i][j+1] && this->points_x[k][i] >= this->intervals[i][j]) {
+                    selected_points.push_back(k);
+                }
+            }
+            sum_1 = 0;
+            for(auto &k : selected_points) {
+                sum_4 = 0;
+                for(int l=0; l<this->dimensions; l++) {
+                    sum_4 += this->p_ij_inv[l][k] * this->p_ij_inv[l][k];
+                }
+                sum_1 += this->function_values[k] * this->function_values[k] / sum_4;
+            }
+            prd_2 = 1;
+            for(int l=0; l<this->dimensions; l++) {
+                sum_3 = 0;
+                for(auto &k : selected_points) {
+                    sum_3 += this->p_ij_inv[l][k] * this->p_ij_inv[l][k];
+                }
+                prd_2 *= sum_3;
+            }
+            sum_1 *= prd_2;
+            f_ij[i][j] = sum_1;
+        }
+        norm_val = 0;
+        for(int j=0; j<this->N_intervals; j++) {
+            norm_val += f_ij[i][j] * this->dx_ij[i][j];
+        }
+        avg_m_ij = 0;
+        for(int j=0; j<this->N_intervals; j++) {
+            m_ij = f_ij[i][j] * this->dx_ij[i][j] / norm_val;
+            m_ij = std::pow((m_ij-1)/std::log(m_ij+1e-8), 1.42);
+            this->m_ij[i][j] = m_ij;
+            avg_m_ij += m_ij;
+        }
+        this->avg_m_ij[i] = avg_m_ij / (double) this->N_intervals;
     }
-    double mi;
-    for(int i=0; i<this->N_intervals; i++) {
-        mi = this->function_values_abs[i] * dx_ij[0][i] / total_weight;
-        mi = std::pow((mi-1)/std::log(mi+1e-8), 1.42);
-        this->avg_mi += mi;
-        this->mi[i] = mi;
-
-    }
-    this->avg_mi /= (double) this->N_intervals;
 }
 
 void Malta::alter_intervals() {
@@ -82,11 +111,11 @@ void Malta::alter_intervals() {
     double delta = 0.0;
     int i_intv = 1;
     for(int i=0; i<this->N_intervals; i++) {
-        delta += this->mi[i];
-        while (delta >= this->avg_mi) {
+        delta += this->m_ij[0][i];
+        while (delta >= this->avg_m_ij[0]) {
             if(i_intv>this->N_intervals-1) break;
-            delta -= this->avg_mi;
-            double new_interval = this->intervals[0][i+1] - (this->dx_ij[0][i] * delta / this->mi[i]);
+            delta -= this->avg_m_ij[0];
+            double new_interval = this->intervals[0][i+1] - (this->dx_ij[0][i] * delta / this->m_ij[0][i]);
             new_intervals[0][i_intv] = new_interval;
             i_intv++;
         }
@@ -137,25 +166,20 @@ void Malta::calculate_errors() {
 void Malta::sample_points(IntgFn integrand) {
     double y;
     int interval_ix;
-    std::fill(this->function_values.begin(), this->function_values.end(), 0.0);
-    std::fill(this->function_values_sq.begin(), this->function_values_sq.end(), 0.0);
-    std::fill(this->function_values_abs.begin(), this->function_values_abs.end(), 0.0);
     std::vector<int> *interval_ixs = new std::vector<int>(this->dimensions);
-    std::vector<double> x(this->dimensions);
     double p_x;
     for(int i=0; i<this->N_points; i++) {
         p_x = 1;
         interval_ixs = Math::get_random_points(0, this->N_intervals-1, this->dimensions);
         for(int j=0; j<this->dimensions; j++) {
             interval_ix = (*interval_ixs)[j];
-            p_x /= this->N_intervals * this->dx_ij[j][interval_ix];
-            x[j] = Math::get_random_point(this->intervals[j][interval_ix], this->intervals[j][interval_ix+1]);
+            this->p_ij_inv[j][i] = this->N_intervals * this->dx_ij[j][interval_ix];
+            p_x /= this->p_ij_inv[j][i];
+            this->points_x[i][j] = Math::get_random_point(this->intervals[j][interval_ix], this->intervals[j][interval_ix+1]);
         }
         this->p_x[i] = p_x;
-        y = integrand(x);
-        this->function_values[i] += y;
-        this->function_values_sq[i] += y*y;
-        this->function_values_abs[i] += Math::abs(y);
+        y = integrand(points_x[i]);
+        this->function_values[i] = y;
     }
     delete interval_ixs;
 }

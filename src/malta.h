@@ -5,6 +5,8 @@
 #include <functional>
 
 using IntgFn = std::function<double(std::vector<double>)>;
+using vec2d = std::vector<std::vector<double>>;
+using vec1d = std::vector<double>;
 class Malta {
     public:
         Malta(int dimensions, int N_points, int N_intervals, int max_iterations);
@@ -25,24 +27,23 @@ class Malta {
         int max_iterations;
         double S_2;
         double delta_sigma_break = 1e-6;
-        double avg_mi;
-        std::vector<std::vector<double>> intervals;
-        std::vector<std::vector<double>> dx_ij;
-        std::vector<double> sigma_iterations;
-        std::vector<double> integral_iterations;
-        std::vector<double> sigma_result;
-        std::vector<double> integral_result;
-        std::vector<double> chi_2_dof;
-        std::vector<double> mi;
-        std::vector<double> mi_width;
-        std::vector<double> function_values;
-        std::vector<double> function_values_sq;
-        std::vector<double> function_values_abs;
-        std::vector<double> p_x;
+        vec1d avg_m_ij;
+        vec2d intervals;
+        vec2d dx_ij;
+        vec1d sigma_iterations;
+        vec1d integral_iterations;
+        vec1d sigma_result;
+        vec1d integral_result;
+        vec1d chi_2_dof;
+        vec2d m_ij;
+        vec1d function_values;
+        vec1d p_x;
+        vec2d p_ij_inv;
+        vec2d points_x;
         void sample_points(IntgFn integrand);
         void calculate_integral();
         void calculate_errors();
-        void calculate_mi();
+        void calculate_mij();
         void alter_intervals();
 };
 
