@@ -4,15 +4,16 @@
 #include <iostream>
 #include <chrono>
 #include "malta.h"
+#include <cmath>
 
 using namespace std;
 
 double integrand(std::vector<double> x) {
-    return x[0]*x[0];
+    return std::sqrt(std::pow(x[0], 3) + std::pow(x[1], 2));
 }
 
 int main() {
-    Malta malta = Malta(1, 10000, 1000, 100);
+    Malta malta = Malta(2, 1000, 100, 50);
     std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
     //malta.integrate(integrand, {{0.0, 1.0}});
     malta.integrate(integrand);

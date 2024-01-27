@@ -106,23 +106,28 @@ void Malta::calculate_mij() {
 }
 
 void Malta::alter_intervals() {
-    std::vector<std::vector<double>> new_intervals(this->dimensions, std::vector<double>(this->N_intervals+1, this->intervals[0][this->N_intervals]));
-    new_intervals[0] = this->intervals[0];
-    double delta = 0.0;
-    int i_intv = 1;
-    for(int i=0; i<this->N_intervals; i++) {
-        delta += this->m_ij[0][i];
-        while (delta >= this->avg_m_ij[0]) {
-            if(i_intv>this->N_intervals-1) break;
-            delta -= this->avg_m_ij[0];
-            double new_interval = this->intervals[0][i+1] - (this->dx_ij[0][i] * delta / this->m_ij[0][i]);
-            new_intervals[0][i_intv] = new_interval;
-            i_intv++;
+    double delta;
+    int i_intv;
+    vec2d new_intervals(this->dimensions, vec1d(this->N_intervals+1));
+    for(int d=0; d<this->dimensions; d++) {
+        new_intervals[d][0] = this->intervals[d][0];
+        new_intervals[d][this->N_intervals] = this->intervals[d][this->N_intervals];
+        delta = 0.0;
+        i_intv = 1;
+        for(int i=0; i<this->N_intervals; i++) {
+            delta += this->m_ij[d][i];
+            while (delta >= this->avg_m_ij[d]) {
+                if(i_intv>this->N_intervals-1) break;
+                delta -= this->avg_m_ij[d];
+                double new_interval = this->intervals[d][i+1] - (this->dx_ij[d][i] * delta / this->m_ij[d][i]);
+                new_intervals[d][i_intv] = new_interval;
+                i_intv++;
+            }
         }
-    }
-    for(int i=0; i<this->N_intervals; i++) {
-        this->dx_ij[0][i] = new_intervals[0][i+1] - new_intervals[0][i];
-        this->intervals[0][i+1] = new_intervals[0][i+1];
+        for(int i=0; i<this->N_intervals; i++) {
+            this->dx_ij[d][i] = new_intervals[d][i+1] - new_intervals[d][i];
+            this->intervals[d][i+1] = new_intervals[d][i+1];
+        }
     }
 }
 
