@@ -66,6 +66,7 @@ void Malta::calculate_mij() {
     double sum_1, prd_2, sum_3, sum_4, norm_val, m_ij, avg_m_ij;
     for(int i=0; i<this->dimensions; i++) {
         for(int j=0; j<this->N_intervals; j++) {
+            selected_points.clear();
             for(int k=0; k<this->N_points; k++) {
                 if(this->points_x[k][i] < this->intervals[i][j+1] && this->points_x[k][i] >= this->intervals[i][j]) {
                     selected_points.push_back(k);
@@ -88,7 +89,7 @@ void Malta::calculate_mij() {
                 prd_2 *= sum_3;
             }
             sum_1 *= prd_2;
-            f_ij[i][j] = sum_1;
+            f_ij[i][j] = std::sqrt(sum_1);
         }
         norm_val = 0;
         for(int j=0; j<this->N_intervals; j++) {
