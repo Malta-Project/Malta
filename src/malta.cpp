@@ -46,9 +46,6 @@ double Malta::integrate(IntgFn integrand) {
         this->calculate_integral();
         this->calculate_errors();
         std::cout << "it=" << i << "; X^2/dof: " << this->chi_2_dof[i-1] << "; std=" << this->sigma_iterations[i] << "; I=" << this->integral_result[i] << std::endl;
-        /* if(Math::abs(this->sigma_iterations[i] - this->sigma_iterations[i-1]) < this->delta_sigma_break) {
-            break;
-        } */
     }
 }
 
