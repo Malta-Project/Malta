@@ -47,15 +47,23 @@ double Malta::integrate(IntgFn integrand) {
         this->calculate_errors();
         std::cout << "it=" << i << "; X^2/dof: " << this->chi_2_dof[i-1] << "; std=" << this->sigma_iterations[i] << "; I=" << this->integral_result[i] << std::endl;
     }
+    return Malta::get_result();
 }
 
 double Malta::integrate(IntgFn integrand, std::vector<std::pair<double, double>> limits) {
     return integrate([integrand, limits](std::vector<double> x) -> double {
-        return integrand({
-            x[0] * (limits[0].second - limits[0].first) + limits[0].first
-        }) * (limits[0].second-limits[0].first);
+        std::vector<double> new_x;
+        double factor = 1.0;
+        for (size_t i = 0; i < x.size(); ++i) {
+            double a = limits[i].first;
+            double b = limits[i].second;
+            new_x.push_back(x[i] * (b - a) + a);
+            factor *= (b - a);
+        }
+        return integrand(new_x) * factor;
     });
 }
+
 
 void Malta::calculate_mij() {
     vec2d f_ij(this->dimensions, vec1d(this->N_intervals));
