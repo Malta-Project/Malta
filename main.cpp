@@ -8,8 +8,6 @@
 
 using namespace std;
 
-// g++ -I ./src main.cpp ./src/math.cpp ./src/malta.cpp -o malta
-
 double integrand(std::vector<double> x) {
     return std::sqrt(std::pow(x[0], 3) + std::pow(x[1], 2));
 }
