@@ -3,18 +3,21 @@
 #include <iostream>
 #include <cmath>
 #include <bits/stdc++.h>
+#include <chrono>
 #include "malta.h"
 #include "malta_math.h"
 
-Malta::Malta(int dimensions, int N_points, int N_intervals, int max_iterations) : 
+Malta::Malta(int dimensions, int N_points, int N_intervals, int max_iterations, bool log) : 
 dimensions{dimensions},
 N_points{N_points},
 N_intervals{N_intervals},
 max_iterations{max_iterations} {
     srand(time(NULL));
+    this->log = log;
 }
 
-double Malta::integrate(IntgFn integrand) {
+double Malta::integrate(IntgFn integrand) {    
+    std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
     this->sigma_iterations = vec1d();
     this->integral_iterations = vec1d();
     this->sigma_result = vec1d();
@@ -45,8 +48,10 @@ double Malta::integrate(IntgFn integrand) {
         this->sample_points(integrand);
         this->calculate_integral();
         this->calculate_errors();
-        std::cout << "it=" << i << "; X^2/dof: " << this->chi_2_dof[i-1] << "; std=" << this->sigma_iterations[i] << "; I=" << this->integral_result[i] << std::endl;
+        if(this->log) std::cout << "it=" << i << "; X^2/dof: " << this->chi_2_dof[i-1] << "; std=" << this->sigma_iterations[i] << "; I=" << this->integral_result[i] << std::endl;
     }
+    std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+    this->integration_time_ms = std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count();    
     return Malta::get_result();
 }
 
@@ -222,4 +227,8 @@ double Malta::get_result() {
 
 double Malta::get_error() {
     return this->sigma_result[this->i_iteration];
+}
+
+double Malta::get_integration_time_ms() {
+    return this->integration_time_ms;
 }

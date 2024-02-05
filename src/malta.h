@@ -9,7 +9,7 @@ using vec2d = std::vector<std::vector<double>>;
 using vec1d = std::vector<double>;
 class Malta {
     public:
-        Malta(int dimensions, int N_points, int N_intervals, int max_iterations);
+        Malta(int dimensions, int N_points, int N_intervals, int max_iterations, bool log=true);
         double integrate(IntgFn integrand);
         double integrate(IntgFn integrand, std::vector<std::pair<double, double>> limits);
         void set_N_intervals(int N_intervals);
@@ -19,7 +19,9 @@ class Malta {
         void set_seed(int seed);
         double get_result();
         double get_error();
+        double get_integration_time_ms();
     private:
+        bool log;
         int dimensions;
         int N_intervals;
         int N_points;
@@ -27,6 +29,7 @@ class Malta {
         int max_iterations;
         double S_2;
         double delta_sigma_break = 1e-6;
+        double integration_time_ms;
         vec1d avg_m_ij;
         vec2d intervals;
         vec2d dx_ij;
