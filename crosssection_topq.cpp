@@ -11,7 +11,7 @@
 using namespace std;
 
 double kaellen(double x, double y, double z) {
-    return sqrt(abs(x*x + y*y + z*z - 2*x*y - 2*x*z - 2*y*z)); //KEINE WURZEL?
+    return x*x + y*y + z*z - 2*x*y - 2*x*z - 2*y*z;
 }
 
 double pi = 3.14159265358979323846,
