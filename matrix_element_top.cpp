@@ -1,5 +1,6 @@
 #include <vector>
 #include <cmath>
+#include <iostream>
 
 long double matrix_element_top(
     long double S, 
@@ -12,7 +13,9 @@ long double matrix_element_top(
     long double GS, 
     long double Nc
 ) {
-    long double a = std::pow(U, 2*(-0.00016073657274198207));
+    /* long double a = std::pow(U, 2*(-0.00016073657274198207));
+    std::cout << "U=" << U << std::endl;
+    std::cout << "a=" << a << std::endl; */
     std::vector<long double> w(105);
     w[0]=std::pow(S, (-1));
     w[1]=std::pow(S34, (-1));
@@ -157,7 +160,8 @@ long double matrix_element_top(
     w[78]=w[70]*w[78];
     w[78]=w[74] + w[78];
     w[78]=T24*w[78];
-    w[79]=std::pow(U, 2*w[70]);
+    //w[79]=std::pow(U, 2*w[70]);
+    w[79]=std::pow(U, 2) * w[70];
     w[73]=w[73] + w[78] + w[79] + w[77];
     w[73]=w[4]*w[73];
     w[7]=w[7] - 2;

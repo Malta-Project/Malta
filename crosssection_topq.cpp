@@ -14,34 +14,33 @@ double kaellen(double x, double y, double z) {
     return sqrt(abs(x*x + y*y + z*z - 2*x*y - 2*x*z - 2*y*z)); //KEINE WURZEL?
 }
 
-double pi = 3.14159265358979323846;
-double S = 14e3; //GeV
-double m_t = 173; //GeV
-double m_j = 0; //GeV
-double K_a1a2 = 1/36;
-double pT_min = 25; //GeV
-double pT_max = 425; //GeV
+double pi = 3.14159265358979323846,
+       S = pow(14e3, 2), //GeV
+       m_t = 173, //GeV
+       m_j = 0, //GeV
+       K_a1a2 = 1/36,
+       pT_min = 25, //GeV
+       pT_max = 425, //GeV
+       phist_min = 0,
+       phist_max = 2 * pi,
+       thetast_min = 0,
+       thetast_max = pi;
 
 double integrand(vector<double> x) {
     //initial state a1, a2 = quark, anti-quark
-    double pT = x[0],
-           s_tt = x[1],
-           z = x[2],
-           x1 = x[3];
-    
+    double phist = x[0],
+           thetast = x[1],
+           pT = x[2],
+           s_tt = x[3],
+           z = x[4],
+           x1 = x[5];  
+
     double mT_j = sqrt(pow(pT,2) + pow(m_j,2));
     double mT_stt = sqrt(pow(pT,2) + pow(s_tt,2));
     double z_min = pow(mT_j + mT_stt, 2) / S;
-    double x2 = z_min / (x1*z); //WARUM??
+    double x2 = z_min / (x1*z);
     double s = x1*x2*S;
 
-    double phist = pi;
-    double thetast = pi/2; //WARUM??
-
-    double phist_min = 0;
-    double phist_max = 2 * pi;
-    double thetast_min = 0;
-    double thetast_max = pi;
     double costheta = (s+pow(m_j,2) - s_tt) / (2*sqrt(s)*mT_j);
     double sintheta = sqrt(pow(costheta, 2) -1);
     double pzj = mT_j * sintheta;
@@ -90,32 +89,43 @@ double integrand(vector<double> x) {
     return integrand_val;
 }
 
-int main() {
-    Malta malta = Malta(4, 1000, 100, 50);
-    //integration variable dependent boundaries:
-    double pT = (pT_min + pT_max)/2;
-    double s_tt = S / 2;
-    double z = 0.5;
-    
-    double mT_j = sqrt(pow(pT,2) + pow(m_j,2));
-    double mT_stt = sqrt(pow(pT,2) + pow(s_tt,2));
-    double z_min = pow(mT_j + mT_stt, 2) / S;
+double integrand_transformed(std::vector<double> x) { //integrand is jacobi-transformed to unit hypercube
+    double phist = x[0],
+           thetast = x[1],
+           pT = x[2],
+           s_tt = x[3],
+           z = x[4],
+           x1 = x[5];
+    //non-transformed integration variables for jacobi-determinant:
+    double pT_ = pT * (pT_max - pT_min) + pT_min;
+    double mT_j_ = sqrt(pow(pT_,2) + pow(m_j,2));
+    double s_tt_ = s_tt * (S + pow(m_j, 2) - 2*sqrt(S)*mT_j_ - 4*pow(m_t, 2)) + 4*pow(m_t, 2);
+    double mT_stt_ = sqrt(pow(pT_,2) + s_tt_);
+    double z_min_ = pow(mT_j_ + mT_stt_, 2) / S;
     std::vector<std::pair<double, double>> boundaries = {
+        {phist_min, phist_max},
+        {thetast_min, thetast_max},
         {pT_min, pT_max},
-        {4*pow(m_t, 2), S + pow(m_j, 2) - 2*sqrt(S)*mT_j},
-        {z_min, 1},
-        {0, 1}
+        {4*pow(m_t, 2), S + pow(m_j, 2) - 2*sqrt(S)*mT_j_},
+        {z_min_, 1},
+        {z_min_/z, 1}
     };
 
-    cout << integrand({
-        (boundaries[0].first+boundaries[0].second)/2,
-        (boundaries[1].first+boundaries[1].second)/2,
-        (boundaries[2].first+boundaries[2].second)/2,
-        (boundaries[3].first+boundaries[3].second)/2
-    }) << endl;
+    std::vector<double> x_orig(x.size());
+    double jac_det = 1;
+    for(size_t i = 0; i < x.size(); ++i) {
+        jac_det *= (boundaries[i].second - boundaries[i].first);
+        x_orig[i] = x[i] * (boundaries[i].second - boundaries[i].first) + boundaries[i].first;
+    }
 
+    return jac_det * integrand(x_orig);
+}
+
+int main() {
+    //std::cout << integrand_transformed({0.5, 0.5, 0.5, 0.5, 0.5, 0.5}) << std::endl;
+    Malta malta = Malta(4, 1000, 100, 50);
     chrono::steady_clock::time_point begin = chrono::steady_clock::now();
-    malta.integrate(integrand, boundaries);
+    malta.integrate(integrand_transformed);
     chrono::steady_clock::time_point end = chrono::steady_clock::now();
     cout << "the result is I = " << malta.get_result() << endl;
     cout << "the error is sigma = " << malta.get_error() << endl;
