@@ -1,28 +1,25 @@
 #include "integration.h"
 #include "ui_integration.h"
 #include "../../src/malta.h"
-#include <cstdlib>
+#include <iostream>
+#include <sstream>
+#include <streambuf>
 #include <QApplication>
 #include <QLabel>
 #include <QPixmap>
-#include <fstream>
+#include <QTextStream>
+#include <QString>
+
+double integrand(std::vector<double> x) {
+    return x[0]*x[1];
+}
 
 Integration::Integration(QWidget *parent, int numDim, int numIter, int numVals, int numThreads, int numPts, bool logEnabled, QString arg)
     : QDialog(parent)
     , ui(new Ui::Integration)
 {
     ui->setupUi(this);
-    std::string latex = "E = mc^2";
-
-    std::ofstream out("equation.tex");
-    out << "\\documentclass{standalone}\n\\begin{document}\n" << latex << "\n\\end{document}\n";
-    out.close();
-
-    // Call latex to convert .tex to .dvi, then dvipng to convert .dvi to .png.
-    system("latex equation.tex && dvipng -o equation.png equation.dvi");
-
-    QPixmap pixmap("equation.png");
-    ui->labelLaTeX->setPixmap(pixmap);
+    ui->labelLaTeX->setText(arg);
 
     ui->textBrowser->setVisible(logEnabled);
 
@@ -34,6 +31,16 @@ Integration::Integration(QWidget *parent, int numDim, int numIter, int numVals, 
     qDebug() << "The value of numPts is: " << numPts;
     qDebug() << "The value of logEnabled is: " << logEnabled;
     qDebug() << "The value of arg is: " << arg;
+
+    std::ostringstream oss;
+    std::streambuf* oldCoutStreamBuf = std::cout.rdbuf();
+    std::cout.rdbuf(oss.rdbuf());
+    Malta malta = Malta(numDim, numPts, numVals, numIter);
+    double integral = malta.integrate(integrand, {{0.0, 4.0}, {0.0, 4.0}});
+    std::cout.rdbuf(oldCoutStreamBuf);
+    QString qstr = QString::fromStdString(oss.str());
+    ui->textBrowser->setText(qstr);
+    ui->textBrowser_2->setText(QString::number(integral));
 }
 
 Integration::~Integration()

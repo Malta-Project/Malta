@@ -456,6 +456,7 @@ public:
         button_0->setObjectName("button_0");
         button_0->setGeometry(QRect(670, 300, 271, 100));
         button_0->setFont(font1);
+        button_0->setMouseTracking(true);
         button_0->setStyleSheet(QString::fromUtf8("QPushButton\n"
 "{\n"
 "	border:none;\n"

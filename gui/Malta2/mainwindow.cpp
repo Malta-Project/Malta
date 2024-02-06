@@ -11,6 +11,8 @@
 #include <QLabel>
 #include <QVBoxLayout>
 #include <QRegularExpression>
+#include <QCursor>
+
 
 // Some global variables
 QString str = "int(0)(1)dx (x)";
@@ -49,6 +51,29 @@ MainWindow::MainWindow(QWidget *parent)
     QAction *toggleLogAction = new QAction("Toggle Log", this);
     connect(toggleLogAction, &QAction::triggered, this, &MainWindow::toggleLog);
     settingsMenu->addAction(toggleLogAction);
+
+    ui->button_0->setCursor(Qt::PointingHandCursor);
+    ui->button_1->setCursor(Qt::PointingHandCursor);
+    ui->button_2->setCursor(Qt::PointingHandCursor);
+    ui->button_3->setCursor(Qt::PointingHandCursor);
+    ui->button_4->setCursor(Qt::PointingHandCursor);
+    ui->button_5->setCursor(Qt::PointingHandCursor);
+    ui->button_6->setCursor(Qt::PointingHandCursor);
+    ui->button_7->setCursor(Qt::PointingHandCursor);
+    ui->button_8->setCursor(Qt::PointingHandCursor);
+    ui->button_9->setCursor(Qt::PointingHandCursor);
+    ui->button_10->setCursor(Qt::PointingHandCursor);
+    ui->button_11->setCursor(Qt::PointingHandCursor);
+    ui->button_12->setCursor(Qt::PointingHandCursor);
+    ui->button_13->setCursor(Qt::PointingHandCursor);
+    ui->button_14->setCursor(Qt::PointingHandCursor);
+    ui->button_15->setCursor(Qt::PointingHandCursor);
+    ui->button_16->setCursor(Qt::PointingHandCursor);
+    ui->button_17->setCursor(Qt::PointingHandCursor);
+    ui->button_18->setCursor(Qt::PointingHandCursor);
+    ui->button_19->setCursor(Qt::PointingHandCursor);
+    ui->button_20->setCursor(Qt::PointingHandCursor);
+    ui->button_21->setCursor(Qt::PointingHandCursor);
 
 }
 MainWindow::~MainWindow()

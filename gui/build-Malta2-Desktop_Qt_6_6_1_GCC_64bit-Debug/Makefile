@@ -55,7 +55,9 @@ OBJECTS_DIR   = ./
 SOURCES       = ../Malta2/about.cpp \
 		../Malta2/integration.cpp \
 		../Malta2/main.cpp \
-		../Malta2/mainwindow.cpp qrc_qmake_qmake_qm_files.cpp \
+		../Malta2/mainwindow.cpp \
+		../../src/malta.cpp \
+		../../src/math.cpp qrc_qmake_qmake_qm_files.cpp \
 		moc_about.cpp \
 		moc_integration.cpp \
 		moc_mainwindow.cpp
@@ -63,6 +65,8 @@ OBJECTS       = about.o \
 		integration.o \
 		main.o \
 		mainwindow.o \
+		malta.o \
+		math.o \
 		qrc_qmake_qmake_qm_files.o \
 		moc_about.o \
 		moc_integration.o \
@@ -231,7 +235,9 @@ DIST          = ../../../../Downloads/splash.png \
 		../Malta2/mainwindow.h ../Malta2/about.cpp \
 		../Malta2/integration.cpp \
 		../Malta2/main.cpp \
-		../Malta2/mainwindow.cpp
+		../Malta2/mainwindow.cpp \
+		../../src/malta.cpp \
+		../../src/math.cpp
 QMAKE_TARGET  = Malta2
 DESTDIR       = 
 TARGET        = Malta2
@@ -586,7 +592,7 @@ distdir: FORCE
 	$(COPY_FILE) --parents qmake_qmake_qm_files.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents ../../../../Qt/6.6.1/gcc_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../Malta2/about.h ../Malta2/integration.h ../Malta2/mainwindow.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../Malta2/about.cpp ../Malta2/integration.cpp ../Malta2/main.cpp ../Malta2/mainwindow.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../Malta2/about.cpp ../Malta2/integration.cpp ../Malta2/main.cpp ../Malta2/mainwindow.cpp ../../src/malta.cpp ../../src/math.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../Malta2/about.ui ../Malta2/integration.ui ../Malta2/mainwindow.ui $(DISTDIR)/
 	$(COPY_FILE) --parents ../Malta2/Malta2_en_US.ts $(DISTDIR)/
 
@@ -1524,7 +1530,56 @@ integration.o: ../Malta2/integration.cpp ../Malta2/integration.h \
 		../../../../Qt/6.6.1/gcc_64/include/QtGui/QTransform \
 		../../../../Qt/6.6.1/gcc_64/include/QtCore/qnativeinterface.h \
 		ui_integration.h \
-		../../src/malta.h
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/QVariant \
+		../../../../Qt/6.6.1/gcc_64/include/QtWidgets/QApplication \
+		../../../../Qt/6.6.1/gcc_64/include/QtWidgets/qapplication.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qcoreapplication.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qeventloop.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qcoreapplication_platform.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qfuture.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qfutureinterface.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qmutex.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qdeadlinetimer.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qelapsedtimer.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qtsan_impl.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qresultstore.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qfuture_impl.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qthreadpool.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qthread.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qrunnable.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qexception.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qpromise.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtGui/qguiapplication.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtGui/qinputmethod.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qlocale.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtGui/qguiapplication_platform.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtWidgets/QGraphicsView \
+		../../../../Qt/6.6.1/gcc_64/include/QtWidgets/qgraphicsview.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtGui/qpainter.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtGui/qtextoption.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtGui/qpen.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtWidgets/qscrollarea.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtWidgets/qabstractscrollarea.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtWidgets/qframe.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtWidgets/qgraphicsscene.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtWidgets/QLCDNumber \
+		../../../../Qt/6.6.1/gcc_64/include/QtWidgets/qlcdnumber.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtWidgets/QLabel \
+		../../../../Qt/6.6.1/gcc_64/include/QtWidgets/qlabel.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtGui/qpicture.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtGui/qtextdocument.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtWidgets/QProgressBar \
+		../../../../Qt/6.6.1/gcc_64/include/QtWidgets/qprogressbar.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtWidgets/QSlider \
+		../../../../Qt/6.6.1/gcc_64/include/QtWidgets/qslider.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtWidgets/qabstractslider.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtWidgets/QTextBrowser \
+		../../../../Qt/6.6.1/gcc_64/include/QtWidgets/qtextbrowser.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtWidgets/qtextedit.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtGui/qtextcursor.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtGui/qtextformat.h \
+		../../src/malta.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtGui/QPixmap
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o integration.o ../Malta2/integration.cpp
 
 main.o: ../Malta2/main.cpp ../Malta2/mainwindow.h \
@@ -1957,6 +2012,13 @@ mainwindow.o: ../Malta2/mainwindow.cpp ../Malta2/mainwindow.h \
 		../../../../Qt/6.6.1/gcc_64/include/QtWidgets/qgridlayout.h \
 		../../../../Qt/6.6.1/gcc_64/include/QtCore/QRegularExpression
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../Malta2/mainwindow.cpp
+
+malta.o: ../../src/malta.cpp ../../src/malta.h \
+		../../src/malta_math.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o malta.o ../../src/malta.cpp
+
+math.o: ../../src/math.cpp ../../src/malta_math.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o math.o ../../src/math.cpp
 
 qrc_qmake_qmake_qm_files.o: qrc_qmake_qmake_qm_files.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_qmake_qmake_qm_files.o qrc_qmake_qmake_qm_files.cpp

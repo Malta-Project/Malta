@@ -12,7 +12,9 @@ SOURCES += \
     about.cpp \
     integration.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    ../../src/malta.cpp \
+    ../../src/math.cpp
 
 HEADERS += \
     about.h \
