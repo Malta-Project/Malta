@@ -23,6 +23,12 @@
       <height>41</height>
      </rect>
     </property>
+    <property name="minimum">
+     <number>1</number>
+    </property>
+    <property name="maximum">
+     <number>10</number>
+    </property>
     <property name="orientation">
      <enum>Qt::Horizontal</enum>
     </property>
@@ -55,7 +61,7 @@
      </font>
     </property>
     <property name="text">
-     <string>int(0)(1) x dx</string>
+     <string>int(0)(1)dx x</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -75,6 +81,9 @@
       <pointsize>30</pointsize>
       <bold>true</bold>
      </font>
+    </property>
+    <property name="mouseTracking">
+     <bool>true</bool>
     </property>
     <property name="styleSheet">
      <string notr="true">QPushButton
@@ -107,6 +116,9 @@
       <bold>true</bold>
      </font>
     </property>
+    <property name="mouseTracking">
+     <bool>true</bool>
+    </property>
     <property name="styleSheet">
      <string notr="true">QPushButton
 {
@@ -137,6 +149,9 @@
       <pointsize>30</pointsize>
       <bold>true</bold>
      </font>
+    </property>
+    <property name="mouseTracking">
+     <bool>true</bool>
     </property>
     <property name="styleSheet">
      <string notr="true">QPushButton
@@ -169,6 +184,9 @@
       <bold>true</bold>
      </font>
     </property>
+    <property name="mouseTracking">
+     <bool>true</bool>
+    </property>
     <property name="styleSheet">
      <string notr="true">QPushButton
 {
@@ -199,6 +217,9 @@
       <pointsize>30</pointsize>
       <bold>true</bold>
      </font>
+    </property>
+    <property name="mouseTracking">
+     <bool>true</bool>
     </property>
     <property name="styleSheet">
      <string notr="true">QPushButton
@@ -231,6 +252,9 @@
       <bold>true</bold>
      </font>
     </property>
+    <property name="mouseTracking">
+     <bool>true</bool>
+    </property>
     <property name="styleSheet">
      <string notr="true">QPushButton
 {
@@ -261,6 +285,9 @@
       <pointsize>30</pointsize>
       <bold>true</bold>
      </font>
+    </property>
+    <property name="mouseTracking">
+     <bool>true</bool>
     </property>
     <property name="styleSheet">
      <string notr="true">QPushButton
@@ -293,6 +320,9 @@
       <bold>true</bold>
      </font>
     </property>
+    <property name="mouseTracking">
+     <bool>true</bool>
+    </property>
     <property name="styleSheet">
      <string notr="true">QPushButton
 {
@@ -323,6 +353,9 @@
       <pointsize>25</pointsize>
       <bold>true</bold>
      </font>
+    </property>
+    <property name="mouseTracking">
+     <bool>true</bool>
     </property>
     <property name="styleSheet">
      <string notr="true">QPushButton
@@ -355,6 +388,9 @@
       <bold>true</bold>
      </font>
     </property>
+    <property name="mouseTracking">
+     <bool>true</bool>
+    </property>
     <property name="styleSheet">
      <string notr="true">QPushButton
 {
@@ -385,6 +421,9 @@
       <pointsize>25</pointsize>
       <bold>true</bold>
      </font>
+    </property>
+    <property name="mouseTracking">
+     <bool>true</bool>
     </property>
     <property name="styleSheet">
      <string notr="true">QPushButton
@@ -417,6 +456,9 @@
       <bold>true</bold>
      </font>
     </property>
+    <property name="mouseTracking">
+     <bool>true</bool>
+    </property>
     <property name="styleSheet">
      <string notr="true">QPushButton
 {
@@ -447,6 +489,9 @@
       <pointsize>26</pointsize>
       <bold>true</bold>
      </font>
+    </property>
+    <property name="mouseTracking">
+     <bool>true</bool>
     </property>
     <property name="styleSheet">
      <string notr="true">QPushButton
@@ -479,6 +524,9 @@
       <bold>true</bold>
      </font>
     </property>
+    <property name="mouseTracking">
+     <bool>true</bool>
+    </property>
     <property name="styleSheet">
      <string notr="true">QPushButton
 {
@@ -509,6 +557,9 @@
       <pointsize>28</pointsize>
       <bold>true</bold>
      </font>
+    </property>
+    <property name="mouseTracking">
+     <bool>true</bool>
     </property>
     <property name="styleSheet">
      <string notr="true">QPushButton
@@ -541,6 +592,9 @@
       <bold>true</bold>
      </font>
     </property>
+    <property name="mouseTracking">
+     <bool>true</bool>
+    </property>
     <property name="styleSheet">
      <string notr="true">QPushButton
 {
@@ -571,6 +625,9 @@
       <pointsize>26</pointsize>
       <bold>true</bold>
      </font>
+    </property>
+    <property name="mouseTracking">
+     <bool>true</bool>
     </property>
     <property name="styleSheet">
      <string notr="true">QPushButton
@@ -603,6 +660,9 @@
       <bold>true</bold>
      </font>
     </property>
+    <property name="mouseTracking">
+     <bool>true</bool>
+    </property>
     <property name="styleSheet">
      <string notr="true">QPushButton
 {
@@ -633,6 +693,9 @@
       <pointsize>28</pointsize>
       <bold>true</bold>
      </font>
+    </property>
+    <property name="mouseTracking">
+     <bool>true</bool>
     </property>
     <property name="styleSheet">
      <string notr="true">QPushButton
@@ -665,6 +728,9 @@
       <bold>true</bold>
      </font>
     </property>
+    <property name="mouseTracking">
+     <bool>true</bool>
+    </property>
     <property name="styleSheet">
      <string notr="true">QPushButton
 {
@@ -696,6 +762,9 @@
       <bold>true</bold>
      </font>
     </property>
+    <property name="mouseTracking">
+     <bool>true</bool>
+    </property>
     <property name="styleSheet">
      <string notr="true">QPushButton
 {
@@ -712,7 +781,7 @@
      <string>z</string>
     </property>
    </widget>
-   <widget class="QSpinBox" name="spinBox_Npoints">
+   <widget class="QSpinBox" name="spinBox2">
     <property name="geometry">
      <rect>
       <x>140</x>
@@ -723,6 +792,9 @@
     </property>
     <property name="minimum">
      <number>100</number>
+    </property>
+    <property name="maximum">
+     <number>1000000</number>
     </property>
    </widget>
    <widget class="QLabel" name="label_2">
@@ -751,7 +823,7 @@
      <string>Number of Intervals</string>
     </property>
    </widget>
-   <widget class="QSpinBox" name="spinBox_Niter">
+   <widget class="QSpinBox" name="spinBox1">
     <property name="geometry">
      <rect>
       <x>800</x>
@@ -783,7 +855,7 @@
      <string>Number of Iterations</string>
     </property>
    </widget>
-   <widget class="QSpinBox" name="spinBox_Nvals">
+   <widget class="QSpinBox" name="spinBox3">
     <property name="geometry">
      <rect>
       <x>470</x>

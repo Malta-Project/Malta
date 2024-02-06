@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
     }
     MainWindow w;
     QThread::sleep(2);
-    w.showMaximized();
+    w.show();
     splash.finish(&w);
     return a.exec();
 }

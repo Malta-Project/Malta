@@ -16,9 +16,16 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    int numDim = 1;
+    bool logEnabled = false;
+    int numIter;
+    int numVals;
+    int numPts;
+    int numThreads = 1;
 
 private:
     Ui::MainWindow *ui;
+
 
 
 private slots:
@@ -26,5 +33,6 @@ private slots:
     void lightMode();
     void darkMode();
     void about();
+    void toggleLog();
 };
 #endif // MAINWINDOW_H

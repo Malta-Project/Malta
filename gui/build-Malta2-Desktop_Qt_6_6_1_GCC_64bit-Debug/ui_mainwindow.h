@@ -54,12 +54,12 @@ public:
     QPushButton *button_20;
     QPushButton *button_17;
     QPushButton *button_18;
-    QSpinBox *spinBox_Npoints;
+    QSpinBox *spinBox2;
     QLabel *label_2;
     QLabel *label_3;
-    QSpinBox *spinBox_Niter;
+    QSpinBox *spinBox1;
     QLabel *label_4;
-    QSpinBox *spinBox_Nvals;
+    QSpinBox *spinBox3;
     QPushButton *button_0;
     QLabel *label_5;
     QLabel *label_6;
@@ -80,6 +80,8 @@ public:
         ThreadNum = new QSlider(centralwidget);
         ThreadNum->setObjectName("ThreadNum");
         ThreadNum->setGeometry(QRect(400, 490, 261, 41));
+        ThreadNum->setMinimum(1);
+        ThreadNum->setMaximum(10);
         ThreadNum->setOrientation(Qt::Horizontal);
         label = new QLabel(centralwidget);
         label->setObjectName("label");
@@ -98,6 +100,7 @@ public:
         font1.setPointSize(30);
         font1.setBold(true);
         button_1->setFont(font1);
+        button_1->setMouseTracking(true);
         button_1->setStyleSheet(QString::fromUtf8("QPushButton\n"
 "{\n"
 "	border:none;\n"
@@ -112,6 +115,7 @@ public:
         button_2->setObjectName("button_2");
         button_2->setGeometry(QRect(150, 550, 121, 100));
         button_2->setFont(font1);
+        button_2->setMouseTracking(true);
         button_2->setStyleSheet(QString::fromUtf8("QPushButton\n"
 "{\n"
 "	border:none;\n"
@@ -126,6 +130,7 @@ public:
         button_4->setObjectName("button_4");
         button_4->setGeometry(QRect(430, 550, 121, 100));
         button_4->setFont(font1);
+        button_4->setMouseTracking(true);
         button_4->setStyleSheet(QString::fromUtf8("QPushButton\n"
 "{\n"
 "	border:none;\n"
@@ -143,6 +148,7 @@ public:
         font2.setPointSize(27);
         font2.setBold(true);
         button_3->setFont(font2);
+        button_3->setMouseTracking(true);
         button_3->setStyleSheet(QString::fromUtf8("QPushButton\n"
 "{\n"
 "	border:none;\n"
@@ -157,6 +163,7 @@ public:
         button_5->setObjectName("button_5");
         button_5->setGeometry(QRect(570, 550, 121, 100));
         button_5->setFont(font1);
+        button_5->setMouseTracking(true);
         button_5->setStyleSheet(QString::fromUtf8("QPushButton\n"
 "{\n"
 "	border:none;\n"
@@ -171,6 +178,7 @@ public:
         button_7->setObjectName("button_7");
         button_7->setGeometry(QRect(850, 550, 121, 100));
         button_7->setFont(font1);
+        button_7->setMouseTracking(true);
         button_7->setStyleSheet(QString::fromUtf8("QPushButton\n"
 "{\n"
 "	border:none;\n"
@@ -185,6 +193,7 @@ public:
         button_6->setObjectName("button_6");
         button_6->setGeometry(QRect(710, 550, 121, 100));
         button_6->setFont(font1);
+        button_6->setMouseTracking(true);
         button_6->setStyleSheet(QString::fromUtf8("QPushButton\n"
 "{\n"
 "	border:none;\n"
@@ -199,6 +208,7 @@ public:
         button_15->setObjectName("button_15");
         button_15->setGeometry(QRect(10, 790, 121, 100));
         button_15->setFont(font1);
+        button_15->setMouseTracking(true);
         button_15->setStyleSheet(QString::fromUtf8("QPushButton\n"
 "{\n"
 "	border:none;\n"
@@ -216,6 +226,7 @@ public:
         font3.setPointSize(25);
         font3.setBold(true);
         button_11->setFont(font3);
+        button_11->setMouseTracking(true);
         button_11->setStyleSheet(QString::fromUtf8("QPushButton\n"
 "{\n"
 "	border:none;\n"
@@ -230,6 +241,7 @@ public:
         button_9->setObjectName("button_9");
         button_9->setGeometry(QRect(150, 670, 121, 100));
         button_9->setFont(font1);
+        button_9->setMouseTracking(true);
         button_9->setStyleSheet(QString::fromUtf8("QPushButton\n"
 "{\n"
 "	border:none;\n"
@@ -244,6 +256,7 @@ public:
         button_12->setObjectName("button_12");
         button_12->setGeometry(QRect(570, 670, 121, 100));
         button_12->setFont(font3);
+        button_12->setMouseTracking(true);
         button_12->setStyleSheet(QString::fromUtf8("QPushButton\n"
 "{\n"
 "	border:none;\n"
@@ -258,6 +271,7 @@ public:
         button_8->setObjectName("button_8");
         button_8->setGeometry(QRect(10, 670, 121, 100));
         button_8->setFont(font1);
+        button_8->setMouseTracking(true);
         button_8->setStyleSheet(QString::fromUtf8("QPushButton\n"
 "{\n"
 "	border:none;\n"
@@ -275,6 +289,7 @@ public:
         font4.setPointSize(26);
         font4.setBold(true);
         button_14->setFont(font4);
+        button_14->setMouseTracking(true);
         button_14->setStyleSheet(QString::fromUtf8("QPushButton\n"
 "{\n"
 "	border:none;\n"
@@ -289,6 +304,7 @@ public:
         button_10->setObjectName("button_10");
         button_10->setGeometry(QRect(290, 670, 121, 100));
         button_10->setFont(font2);
+        button_10->setMouseTracking(true);
         button_10->setStyleSheet(QString::fromUtf8("QPushButton\n"
 "{\n"
 "	border:none;\n"
@@ -306,6 +322,7 @@ public:
         font5.setPointSize(28);
         font5.setBold(true);
         button_13->setFont(font5);
+        button_13->setMouseTracking(true);
         button_13->setStyleSheet(QString::fromUtf8("QPushButton\n"
 "{\n"
 "	border:none;\n"
@@ -320,6 +337,7 @@ public:
         button_16->setObjectName("button_16");
         button_16->setGeometry(QRect(150, 790, 121, 100));
         button_16->setFont(font1);
+        button_16->setMouseTracking(true);
         button_16->setStyleSheet(QString::fromUtf8("QPushButton\n"
 "{\n"
 "	border:none;\n"
@@ -334,6 +352,7 @@ public:
         button_21->setObjectName("button_21");
         button_21->setGeometry(QRect(850, 790, 121, 100));
         button_21->setFont(font4);
+        button_21->setMouseTracking(true);
         button_21->setStyleSheet(QString::fromUtf8("QPushButton\n"
 "{\n"
 "	border:none;\n"
@@ -348,6 +367,7 @@ public:
         button_19->setObjectName("button_19");
         button_19->setGeometry(QRect(570, 790, 121, 100));
         button_19->setFont(font3);
+        button_19->setMouseTracking(true);
         button_19->setStyleSheet(QString::fromUtf8("QPushButton\n"
 "{\n"
 "	border:none;\n"
@@ -362,6 +382,7 @@ public:
         button_20->setObjectName("button_20");
         button_20->setGeometry(QRect(710, 790, 121, 100));
         button_20->setFont(font5);
+        button_20->setMouseTracking(true);
         button_20->setStyleSheet(QString::fromUtf8("QPushButton\n"
 "{\n"
 "	border:none;\n"
@@ -376,6 +397,7 @@ public:
         button_17->setObjectName("button_17");
         button_17->setGeometry(QRect(290, 790, 121, 100));
         button_17->setFont(font2);
+        button_17->setMouseTracking(true);
         button_17->setStyleSheet(QString::fromUtf8("QPushButton\n"
 "{\n"
 "	border:none;\n"
@@ -390,6 +412,7 @@ public:
         button_18->setObjectName("button_18");
         button_18->setGeometry(QRect(430, 790, 121, 100));
         button_18->setFont(font3);
+        button_18->setMouseTracking(true);
         button_18->setStyleSheet(QString::fromUtf8("QPushButton\n"
 "{\n"
 "	border:none;\n"
@@ -400,34 +423,35 @@ public:
 "	min-height:100px;\n"
 "	padding:0;\n"
 "}"));
-        spinBox_Npoints = new QSpinBox(centralwidget);
-        spinBox_Npoints->setObjectName("spinBox_Npoints");
-        spinBox_Npoints->setGeometry(QRect(140, 440, 161, 41));
-        spinBox_Npoints->setMinimum(100);
+        spinBox2 = new QSpinBox(centralwidget);
+        spinBox2->setObjectName("spinBox2");
+        spinBox2->setGeometry(QRect(140, 440, 161, 41));
+        spinBox2->setMinimum(100);
+        spinBox2->setMaximum(1000000);
         label_2 = new QLabel(centralwidget);
         label_2->setObjectName("label_2");
         label_2->setGeometry(QRect(10, 430, 131, 61));
         label_3 = new QLabel(centralwidget);
         label_3->setObjectName("label_3");
         label_3->setGeometry(QRect(320, 430, 131, 61));
-        spinBox_Niter = new QSpinBox(centralwidget);
-        spinBox_Niter->setObjectName("spinBox_Niter");
-        spinBox_Niter->setGeometry(QRect(800, 440, 161, 41));
-        spinBox_Niter->setMinimum(1);
-        spinBox_Niter->setMaximum(1000);
-        spinBox_Niter->setValue(42);
+        spinBox1 = new QSpinBox(centralwidget);
+        spinBox1->setObjectName("spinBox1");
+        spinBox1->setGeometry(QRect(800, 440, 161, 41));
+        spinBox1->setMinimum(1);
+        spinBox1->setMaximum(1000);
+        spinBox1->setValue(42);
         label_4 = new QLabel(centralwidget);
         label_4->setObjectName("label_4");
         label_4->setGeometry(QRect(650, 430, 131, 61));
-        spinBox_Nvals = new QSpinBox(centralwidget);
-        spinBox_Nvals->setObjectName("spinBox_Nvals");
-        spinBox_Nvals->setGeometry(QRect(470, 440, 161, 41));
+        spinBox3 = new QSpinBox(centralwidget);
+        spinBox3->setObjectName("spinBox3");
+        spinBox3->setGeometry(QRect(470, 440, 161, 41));
         QFont font6;
         font6.setPointSize(10);
-        spinBox_Nvals->setFont(font6);
-        spinBox_Nvals->setMinimum(1);
-        spinBox_Nvals->setMaximum(1000);
-        spinBox_Nvals->setValue(10);
+        spinBox3->setFont(font6);
+        spinBox3->setMinimum(1);
+        spinBox3->setMaximum(1000);
+        spinBox3->setValue(10);
         button_0 = new QPushButton(centralwidget);
         button_0->setObjectName("button_0");
         button_0->setGeometry(QRect(670, 300, 271, 100));
@@ -470,7 +494,7 @@ public:
         actionDark_mode->setText(QCoreApplication::translate("MainWindow", "Dark mode", nullptr));
         actionLight_mode->setText(QCoreApplication::translate("MainWindow", "Light mode", nullptr));
         label->setText(QCoreApplication::translate("MainWindow", "Number of Threads", nullptr));
-        Display->setText(QCoreApplication::translate("MainWindow", "int(0)(1) x dx", nullptr));
+        Display->setText(QCoreApplication::translate("MainWindow", "int(0)(1)dx x", nullptr));
         button_1->setText(QCoreApplication::translate("MainWindow", "\342\210\253(x)dx", nullptr));
         button_2->setText(QCoreApplication::translate("MainWindow", "y\313\243", nullptr));
         button_4->setText(QCoreApplication::translate("MainWindow", "\317\200", nullptr));

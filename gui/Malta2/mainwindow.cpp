@@ -1,16 +1,19 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
 #include "about.h"
+#include "integration.h"
 #include <QMenuBar>
 #include <QAction>
+#include <QMessageBox>
 #include <QPalette>
 #include <QColor>
 #include <QDialog>
 #include <QLabel>
 #include <QVBoxLayout>
+#include <QRegularExpression>
 
 // Some global variables
-QString str = "int(0)(0)dx x";
+QString str = "int(0)(1)dx (x)";
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -42,6 +45,11 @@ MainWindow::MainWindow(QWidget *parent)
     QMenu *toggleModeMenu = settingsMenu->addMenu("Toggle Mode");
     toggleModeMenu->addAction(lightModeAction);
     toggleModeMenu->addAction(darkModeAction);
+
+    QAction *toggleLogAction = new QAction("Toggle Log", this);
+    connect(toggleLogAction, &QAction::triggered, this, &MainWindow::toggleLog);
+    settingsMenu->addAction(toggleLogAction);
+
 }
 MainWindow::~MainWindow()
 {
@@ -52,17 +60,87 @@ void MainWindow::NumPressed(){
     QPushButton *button = (QPushButton *)sender();
     QString butVal = button->text();
     QString displayVal = ui->Display->text();
-    if ((displayVal.toDouble() == 0) || (displayVal.toDouble() == 0.0)) {
-        ui->Display->setText(displayVal+butVal);
-    } else {
-        QString newVal = displayVal + butVal;
 
+    if (butVal == "Integrate!") {
+        int numIter = ui->spinBox1->value();
+        int numPts = ui->spinBox2->value();
+        int numVals = ui->spinBox3->value();
+        int numThreads = ui->ThreadNum->value();
+
+        QString displayVal = ui->Display->text();
+
+        // Create a regular expression that matches integral expressions
+        QRegularExpression re("int\\(.*?\\)\\(.*?\\)d.");
+
+        // Find all matches of the regular expression in displayVal
+        QRegularExpressionMatchIterator i = re.globalMatch(displayVal);
+
+        // Count the matches
+        int count = 0;
+        while (i.hasNext()) {
+            i.next();
+            count++;
+        }
+        if (count > 5) {
+            QMessageBox::critical(this, "Error", "The Malta-GUI only supports integration up to 5D. ");
+        } else {
+            numDim = count;
+        }
+        Integration *integrationWindow = new Integration(this, numDim, numIter, numVals, numThreads, numPts, logEnabled, displayVal = ui->Display->text());
+        integrationWindow->show();
+
+    } else if (butVal == "∫(x)dx") {
+        QRegularExpression re("int\\(.*\\)\\(.*\\)dx");
+        if (numDim == 5) {
+            QMessageBox::critical(this, "Error", "The Malta-GUI only supports integration up to 5D. ");
+        } else if (displayVal.contains(QRegularExpression("int\\(.*\\)\\(.*\\)da int\\(.*\\)\\(.*\\)dz int\\(.*\\)\\(.*\\)dy int\\(.*\\)\\(.*\\)dx"))) {
+            displayVal = "int(0)(1)db " + displayVal;
+            numDim = 5;
+        } else if (displayVal.contains(QRegularExpression("int\\(.*\\)\\(.*\\)dz int\\(.*\\)\\(.*\\)dy int\\(.*\\)\\(.*\\)dx"))) {
+            displayVal = "int(0)(1)da " + displayVal;
+            numDim = 4;
+        } else if (displayVal.contains(QRegularExpression("int\\(.*\\)\\(.*\\)dy int\\(.*\\)\\(.*\\)dx"))) {
+            displayVal = "int(0)(1)dz " + displayVal;
+            numDim = 3;
+        } else if (displayVal.contains(QRegularExpression("int\\(.*\\)\\(.*\\)dx"))) {
+            displayVal = "int(0)(1)dy " + displayVal;
+            numDim = 2;
+        } else {
+            displayVal = "int(0)(1)dx " + displayVal;
+            numDim = 1;
+        }
+    } else if (butVal == "clear") {
+        displayVal = "";
+        numDim = 0;
+    } else if (butVal == "yˣ") {
+        displayVal += "(y)^(x)";
+    } else if (butVal == "logₓ(y)") {
+        displayVal += "log(x)(y)";
+    } else if (butVal == "√x") {
+        displayVal += "sqrt(x)";
+    } else if (butVal == "eˣ") {
+        displayVal += "(e)^(x)";
+    } else if (butVal == "ˣ/ᵧ") {
+        displayVal += "(x)/(y)";
+    } else if (butVal == "sin⁻¹(x)") {
+        displayVal += "asin(x)";
+    } else if (butVal == "cos⁻¹(x)") {
+        displayVal += "acos(x)";
+    } else {
+        displayVal += butVal;
     }
+
+    ui->Display->setText(displayVal);
 }
 
 
 void MainWindow::lightMode()
 {
+    // Set the style sheet for the spin boxes and the display
+    ui->spinBox1->setStyleSheet("QSpinBox { background-color: white; color: black; }");
+    ui->spinBox2->setStyleSheet("QSpinBox { background-color: white; color: black; }");
+    ui->spinBox3->setStyleSheet("QSpinBox { background-color: white; color: black; }");
+    ui->Display->setStyleSheet("QLineEdit { background-color: white; color: black; }");
     QPalette palette;
     palette.setColor(QPalette::Window, Qt::white);
     palette.setColor(QPalette::WindowText, Qt::black);
@@ -71,6 +149,11 @@ void MainWindow::lightMode()
 
 void MainWindow::darkMode()
 {
+    // Set the style sheet for the spin boxes and the display
+    ui->spinBox1->setStyleSheet("QSpinBox { background-color: #3C3C3C; color: white; }");
+    ui->spinBox2->setStyleSheet("QSpinBox { background-color: #3C3C3C; color: white; }");
+    ui->spinBox3->setStyleSheet("QSpinBox { background-color: #3C3C3C; color: white; }");
+    ui->Display->setStyleSheet("QLineEdit { background-color: #3C3C3C; color: white; }");
     QPalette palette;
     QColor customColor(60, 60, 60);  // Custom dark color
     palette.setColor(QPalette::Window, customColor);
@@ -78,8 +161,22 @@ void MainWindow::darkMode()
     qApp->setPalette(palette);
 }
 
+
+
 void MainWindow::about()
 {
     About dialog(this);
     dialog.exec();
+}
+
+void MainWindow::toggleLog()
+{
+    logEnabled = !logEnabled;
+
+    // Show a message box
+    if (logEnabled) {
+        QMessageBox::information(this, "Log Status", "Log is enabled");
+    } else {
+        QMessageBox::information(this, "Log Status", "Log is disabled");
+    }
 }

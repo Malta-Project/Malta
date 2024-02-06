@@ -10,15 +10,18 @@ CONFIG += c++17
 
 SOURCES += \
     about.cpp \
+    integration.cpp \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
     about.h \
+    integration.h \
     mainwindow.h
 
 FORMS += \
     about.ui \
+    integration.ui \
     mainwindow.ui
 
 TRANSLATIONS += \
