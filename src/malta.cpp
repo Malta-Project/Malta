@@ -4,16 +4,18 @@
 #include <cmath>
 #include <bits/stdc++.h>
 #include <chrono>
+#include <thread>
 #include "malta.h"
 #include "malta_math.h"
 
-Malta::Malta(int dimensions, int N_points, int N_intervals, int max_iterations, bool log) : 
+Malta::Malta(int dimensions, int N_points, int N_intervals, int max_iterations, bool log, int n_threads) : 
 dimensions{dimensions},
 N_points{N_points},
 N_intervals{N_intervals},
-max_iterations{max_iterations} {
+max_iterations{max_iterations},
+log{log},
+n_threads{n_threads} {
     srand(time(NULL));
-    this->log = log;
 }
 
 double Malta::integrate(IntgFn integrand) {    
@@ -180,24 +182,42 @@ void Malta::calculate_errors() {
 }
 
 void Malta::sample_points(IntgFn integrand) {
-    double y;
-    int interval_ix;
-    std::vector<int> *interval_ixs = new std::vector<int>(this->dimensions);
-    double p_x;
-    for(int i=0; i<this->N_points; i++) {
-        p_x = 1;
-        interval_ixs = Math::get_random_points(0, this->N_intervals-1, this->dimensions);
-        for(int j=0; j<this->dimensions; j++) {
-            interval_ix = (*interval_ixs)[j];
-            this->p_ij_inv[j][i] = this->N_intervals * this->dx_ij[j][interval_ix];
-            p_x /= this->p_ij_inv[j][i];
-            this->points_x[i][j] = Math::get_random_point(this->intervals[j][interval_ix], this->intervals[j][interval_ix+1]);
-        }
-        this->p_x[i] = p_x;
-        y = integrand(points_x[i]);
-        this->function_values[i] = y;
+    std::vector<std::pair<int, int>> N_points_thread(this->n_threads);
+    for(int i=0; i<this->n_threads; i++) {
+        N_points_thread[i] = {i*this->N_points/this->n_threads, (i+1)*this->N_points/this->n_threads};
     }
-    delete interval_ixs;
+    N_points_thread[this->n_threads-1].second = this->N_points;
+    std::vector<std::thread> threads(this->n_threads);
+    int N_intervals = this->N_intervals,
+        dimensions = this->dimensions;
+    for(int t=0; t<this->n_threads; t++) {
+        threads[t] = std::thread([N_points_thread, t, N_intervals, dimensions, integrand,
+                                  &p_x=this->p_x,
+                                  &function_values=this->function_values,
+                                  &dx_ij=this->dx_ij,
+                                  &intervals=this->intervals,
+                                  &p_ij_inv=this->p_ij_inv,
+                                  &points_x=this->points_x]() {
+            std::vector<int> *interval_ixs = new std::vector<int>(dimensions);
+            for(int i=N_points_thread[t].first; i<N_points_thread[t].second; i++) {
+                double p_x_loc = 1;
+                int interval_ix;
+                interval_ixs = Math::get_random_points(0, N_intervals-1, dimensions);
+                for(int j=0; j<dimensions; j++) {
+                    interval_ix = (*interval_ixs)[j];
+                    p_ij_inv[j][i] = N_intervals * dx_ij[j][interval_ix];
+                    p_x_loc /= p_ij_inv[j][i];
+                    points_x[i][j] = Math::get_random_point(intervals[j][interval_ix], intervals[j][interval_ix+1]);
+                }
+                p_x[i] = p_x_loc;
+                function_values[i] = integrand(points_x[i]);
+            }
+            delete interval_ixs;
+        });
+    }
+    for(int i=0; i<this->n_threads; i++) {
+        threads[i].join();
+    }
 }
 
 
@@ -231,4 +251,12 @@ double Malta::get_error() {
 
 double Malta::get_integration_time_ms() {
     return this->integration_time_ms;
+}
+
+void Malta::set_threads(int n_threads) {
+    this->n_threads = n_threads;
+}
+
+int Malta::get_threads() {
+    return this->n_threads;
 }
