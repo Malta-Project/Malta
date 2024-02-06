@@ -100,15 +100,17 @@ double integrand_transformed(std::vector<double> x) { //integrand is jacobi-tran
     double pT_ = pT * (pT_max - pT_min) + pT_min;
     double mT_j_ = sqrt(pow(pT_,2) + pow(m_j,2));
     double s_tt_ = s_tt * (S + pow(m_j, 2) - 2*sqrt(S)*mT_j_ - 4*pow(m_t, 2)) + 4*pow(m_t, 2);
+    s_tt_ = s_tt * (S + m_j*m_j - 2*sqrt(S)*mT_j_ - 4*m_t*m_t) + 4*m_t*m_t;
     double mT_stt_ = sqrt(pow(pT_,2) + s_tt_);
     double z_min_ = pow(mT_j_ + mT_stt_, 2) / S;
+    double z_ = z * (1 - z_min_) + z_min_;
     std::vector<std::pair<double, double>> boundaries = {
         {phist_min, phist_max},
         {thetast_min, thetast_max},
         {pT_min, pT_max},
         {4*pow(m_t, 2), S + pow(m_j, 2) - 2*sqrt(S)*mT_j_},
         {z_min_, 1},
-        {z_min_/z, 1}
+        {z_min_/z_, 1}
     };
 
     std::vector<double> x_orig(x.size());
@@ -122,7 +124,9 @@ double integrand_transformed(std::vector<double> x) { //integrand is jacobi-tran
 }
 
 int main() {
-    //std::cout << integrand_transformed({0.5, 0.5, 0.5, 0.5, 0.5, 0.5}) << std::endl;
+    std::cout << "val=" << integrand_transformed({0.5, 0.5, 0.5, 0.5, 0.5, 0.5}) << std::endl;
+    //std::cout << pow(2, 2) << std::endl;
+    return 0;
     Malta malta = Malta(4, 1000, 100, 50);
     chrono::steady_clock::time_point begin = chrono::steady_clock::now();
     malta.integrate(integrand_transformed);

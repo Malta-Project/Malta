@@ -1,40 +1,38 @@
 #include <vector>
 #include <cmath>
-#include <iostream>
 
-long double matrix_element_top(
-    long double S, 
-    long double T, 
-    long double U, 
-    long double T14, 
-    long double T24, 
-    long double S34, 
-    long double MT, 
-    long double GS, 
-    long double Nc
+using namespace std;
+
+double matrix_element_top(
+    double S, 
+    double T, 
+    double U, 
+    double T14, 
+    double T24, 
+    double S34, 
+    double MT, 
+    double GS, 
+    double Nc
 ) {
-    /* long double a = std::pow(U, 2*(-0.00016073657274198207));
-    std::cout << "U=" << U << std::endl;
-    std::cout << "a=" << a << std::endl; */
-    std::vector<long double> w(105);
-    w[0]=std::pow(S, (-1));
-    w[1]=std::pow(S34, (-1));
-    w[2]=1.0/( - U - T24 - S + 2*std::pow(MT, 2));
-    w[3]=std::pow(Nc, (-1));
-    w[4]=1.0/(U + T24 + S34 - 2*std::pow(MT, 2));
-    w[5]=1.0/( - U - T - S34 + 2*std::pow(MT, 2));
-    w[6]=1.0/( - T24 - T14 - S34 + 2*std::pow(MT, 2));
-    w[7]=std::pow(Nc, 2);
+    std::vector<double> w(105);
+    w[0]=1/S;
+    w[1]=1/S34;
+    w[2]=1/( - U - T24 - S + 2*pow(MT, 2));
+    w[3]=1/Nc;
+    w[4]=1/(U + T24 + S34 - 2*pow(MT, 2));
+    w[5]=1/( - U - T - S34 + 2*pow(MT, 2));
+    w[6]=1/( - T24 - T14 - S34 + 2*pow(MT, 2));
+    w[7]=pow(Nc, 2);
     w[8]=w[7] - 3;
     w[8]=w[8]*Nc;
     w[8]=w[8] + 2*w[3];
-    w[9]=std::pow(GS, 6);
+    w[9]=pow(GS, 6);
     w[10]=w[8]*w[9];
     w[11]=w[0]*w[10];
     w[12]=w[9]*w[1];
     w[13]=w[8]*w[12];
     w[14]=w[11] - w[13];
-    w[15]=std::pow(MT, 2);
+    w[15]=pow(MT, 2);
     w[16]=w[15]*w[9];
     w[17]=w[0]*w[1];
     w[18]=w[16]*w[8]*w[17];
@@ -62,7 +60,7 @@ long double matrix_element_top(
     w[28]=w[28]*w[21];
     w[29]= - w[28] + w[19];
     w[29]=T14*w[29];
-    w[30]=std::pow(MT, 4);
+    w[30]=pow(MT, 4);
     w[31]=w[30]*w[25];
     w[22]= - w[22] + 2*w[31];
     w[31]=2*U;
@@ -160,8 +158,7 @@ long double matrix_element_top(
     w[78]=w[70]*w[78];
     w[78]=w[74] + w[78];
     w[78]=T24*w[78];
-    //w[79]=std::pow(U, 2*w[70]);
-    w[79]=std::pow(U, 2) * w[70];
+    w[79]=pow(U, 2)*w[70];
     w[73]=w[73] + w[78] + w[79] + w[77];
     w[73]=w[4]*w[73];
     w[7]=w[7] - 2;
@@ -603,6 +600,5 @@ long double matrix_element_top(
     w[7]=w[7] + w[10] + w[12] + w[11] - w[43];
     w[7]=w[6]*w[7];
     w[7]=w[14] + w[24] + w[8] + w[16] + 2*w[9] + w[7];
-
     return 2*w[7];
 }
