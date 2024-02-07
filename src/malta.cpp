@@ -76,18 +76,18 @@ double Malta::integrate(IntgFn integrand, std::vector<std::pair<double, double>>
     });
 }
 
-
 void Malta::calculate_mij() {
     vec2d f_ij(this->dimensions, vec1d(this->N_intervals));
     double norm_val, m_ij, avg_m_ij;
     std::vector<std::pair<int, int>> N_intervals_thread(this->N_intervals);
-    for(int i=0; i<this->n_threads; i++) {
-        N_intervals_thread[i] = {i*this->N_intervals/this->n_threads, (i+1)*this->N_intervals/this->n_threads};
+    int n_threads_loc = Math::min(this->n_threads, this->N_intervals);
+    for(int i=0; i<n_threads_loc; i++) {
+        N_intervals_thread[i] = {i*this->N_intervals/n_threads_loc, (i+1)*this->N_intervals/n_threads_loc};
     }
-    N_intervals_thread[this->n_threads-1].second = this->N_intervals;
-    std::vector<std::thread> threads(this->n_threads);
+    N_intervals_thread[n_threads_loc-1].second = this->N_intervals;
+    std::vector<std::thread> threads(n_threads_loc);
     for(int i=0; i<this->dimensions; i++) {
-        for(int t=0; t<this->n_threads; t++) {            
+        for(int t=0; t<n_threads_loc; t++) {            
             threads[t] = std::thread([&N_intervals_thread, t, i, N_points=this->N_points, dimensions=this->dimensions, &f_ij=f_ij,
                                       &points_x=this->points_x, &intervals=this->intervals, &p_ij_inv=this->p_ij_inv, &function_values=this->function_values]() {
                 double sum_1, prd_2, sum_3, sum_4;
@@ -119,7 +119,7 @@ void Malta::calculate_mij() {
                 }
             });
         }
-        for(int t=0; t<this->n_threads; t++) {
+        for(int t=0; t<n_threads_loc; t++) {
             threads[t].join();
         }
         norm_val = 0;
@@ -164,15 +164,16 @@ void Malta::alter_intervals() {
 }
 
 void Malta::calculate_integral(IntgFn integrand) {
-    vec1d S_2_thread(this->n_threads),
-          I_thread(this->n_threads);
-    std::vector<std::pair<int, int>> N_points_thread(this->n_threads);
-    for(int i=0; i<this->n_threads; i++) {
-        N_points_thread[i] = {i*this->N_points/this->n_threads, (i+1)*this->N_points/this->n_threads};
+    int n_threads_loc = Math::min(this->n_threads, this->N_points);
+    vec1d S_2_thread(n_threads_loc, 0.0),
+          I_thread(n_threads_loc, 0.0);
+    std::vector<std::pair<int, int>> N_points_thread(n_threads_loc);
+    for(int i=0; i<n_threads_loc; i++) {
+        N_points_thread[i] = {i*this->N_points/n_threads_loc, (i+1)*this->N_points/n_threads_loc};
     }
-    N_points_thread[this->n_threads-1].second = this->N_points;
-    std::vector<std::thread> threads(this->n_threads);
-    for(int t=0; t<this->n_threads; t++) {
+    N_points_thread[n_threads_loc-1].second = this->N_points;
+    std::vector<std::thread> threads(n_threads_loc);
+    for(int t=0; t<n_threads_loc; t++) {
         threads[t] = std::thread([t, N_points=this->N_points, integrand, &S_2_thread, &I_thread, &N_points_thread,
                                   &points_x=this->points_x, &function_values=this->function_values, &p_x=this->p_x]() {
             double I = 0.0,
@@ -189,7 +190,7 @@ void Malta::calculate_integral(IntgFn integrand) {
     }
     this->S_2 = 0.0;
     double I = 0.0;
-    for(int t=0; t<this->n_threads; t++) {
+    for(int t=0; t<n_threads_loc; t++) {
         threads[t].join();
         this->S_2 += S_2_thread[t];
         I += I_thread[t];

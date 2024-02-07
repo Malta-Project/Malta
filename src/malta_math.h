@@ -9,6 +9,10 @@ class Math {
         double static get_random_point(double lower_limit, double upper_limit);
         int static get_random_point(int lower_limit, int upper_limit);
         double static abs(double x);
+        double static max(double x, double y);
+        double static min(double x, double y);
+        int static max(int x, int y);
+        int static min(int x, int y);
 };
 
 #endif
