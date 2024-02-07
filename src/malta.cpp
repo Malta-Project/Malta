@@ -40,15 +40,15 @@ double Malta::integrate(IntgFn integrand) {
             this->intervals[i][j] = dx * j;
         }
     }
-    this->sample_points(integrand);
-    this->calculate_integral();
+    this->sample_points();
+    this->calculate_integral(integrand);
     this->calculate_errors();
     for(int i=1; i<=this->max_iterations; i++) {
         this->i_iteration = i;
         this->calculate_mij();
         this->alter_intervals();
-        this->sample_points(integrand);
-        this->calculate_integral();
+        this->sample_points();
+        this->calculate_integral(integrand);
         this->calculate_errors();
         if(this->log) std::cout << "it=" << i << "; X^2/dof: " << this->chi_2_dof[i-1] << "; std=" << this->sigma_iterations[i] << "; I=" << this->integral_result[i] << std::endl;
     }
@@ -79,7 +79,7 @@ void Malta::calculate_mij() {
     for(int i=0; i<this->n_threads; i++) {
         N_intervals_thread[i] = {i*this->N_intervals/this->n_threads, (i+1)*this->N_intervals/this->n_threads};
     }
-    N_intervals_thread[this->n_threads-1].second = this->N_intervals;    
+    N_intervals_thread[this->n_threads-1].second = this->N_intervals;
     std::vector<std::thread> threads(this->n_threads);
     for(int i=0; i<this->dimensions; i++) {
         for(int t=0; t<this->n_threads; t++) {            
@@ -113,7 +113,7 @@ void Malta::calculate_mij() {
                     f_ij[i][j] = std::sqrt(sum_1);
                 }
             });
-        }        
+        }
         for(int t=0; t<this->n_threads; t++) {
             threads[t].join();
         }
@@ -158,14 +158,36 @@ void Malta::alter_intervals() {
     }
 }
 
-void Malta::calculate_integral() {
-    double I = 0.0,
-           val = 0.0;
+void Malta::calculate_integral(IntgFn integrand) {
+    vec1d S_2_thread(this->n_threads),
+          I_thread(this->n_threads);
+    std::vector<std::pair<int, int>> N_points_thread(this->n_threads);
+    for(int i=0; i<this->n_threads; i++) {
+        N_points_thread[i] = {i*this->N_points/this->n_threads, (i+1)*this->N_points/this->n_threads};
+    }
+    N_points_thread[this->n_threads-1].second = this->N_points;
+    std::vector<std::thread> threads(this->n_threads);
+    for(int t=0; t<this->n_threads; t++) {
+        threads[t] = std::thread([t, N_points=this->N_points, integrand, &S_2_thread, &I_thread, &N_points_thread,
+                                  &points_x=this->points_x, &function_values=this->function_values, &p_x=this->p_x]() {
+            double I = 0.0,
+                   val = 0.0,
+                   y;
+            for(int i=N_points_thread[t].first; i<N_points_thread[t].second; i++) {
+                y = integrand(points_x[i]);
+                function_values[i] = y;
+                val = y / p_x[i];
+                I_thread[t] += val;
+                S_2_thread[t] += val * val;
+            }
+        });
+    }
     this->S_2 = 0.0;
-    for(int i=0; i<this->N_points; i++) {
-        val = this->function_values[i] / this->p_x[i];
-        I += val;
-        this->S_2 += val * val;
+    double I = 0.0;
+    for(int t=0; t<this->n_threads; t++) {
+        threads[t].join();
+        this->S_2 += S_2_thread[t];
+        I += I_thread[t];
     }
     this->S_2 /= (double) this->N_points;
     this->integral_iterations.push_back(I / (double) this->N_points);
@@ -195,7 +217,7 @@ void Malta::calculate_errors() {
     this->chi_2_dof.push_back(chi_2);
 }
 
-void Malta::sample_points(IntgFn integrand) {
+void Malta::sample_points() {
     double y;
     int interval_ix;
     std::vector<int> *interval_ixs = new std::vector<int>(this->dimensions);
@@ -210,8 +232,6 @@ void Malta::sample_points(IntgFn integrand) {
             this->points_x[i][j] = Math::get_random_point(this->intervals[j][interval_ix], this->intervals[j][interval_ix+1]);
         }
         this->p_x[i] = p_x;
-        y = integrand(points_x[i]);
-        this->function_values[i] = y;
     }
     delete interval_ixs;
 }

@@ -46,8 +46,8 @@ class Malta {
         vec1d p_x;
         vec2d p_ij_inv;
         vec2d points_x;
-        void sample_points(IntgFn integrand);
-        void calculate_integral();
+        void sample_points();
+        void calculate_integral(IntgFn integrand);
         void calculate_errors();
         void calculate_mij();
         void alter_intervals();
