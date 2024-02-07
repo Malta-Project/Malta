@@ -54,7 +54,10 @@ public:
         textBrowser->setGeometry(QRect(20, 120, 521, 192));
         labelLaTeX = new QLabel(Integration);
         labelLaTeX->setObjectName("labelLaTeX");
-        labelLaTeX->setGeometry(QRect(30, 40, 231, 21));
+        labelLaTeX->setGeometry(QRect(30, 40, 511, 21));
+        QFont font;
+        font.setFamilies({QString::fromUtf8("Ubuntu Mono")});
+        labelLaTeX->setFont(font);
         label = new QLabel(Integration);
         label->setObjectName("label");
         label->setGeometry(QRect(20, 340, 58, 15));
@@ -67,7 +70,14 @@ public:
         horizontalSlider = new QSlider(Integration);
         horizontalSlider->setObjectName("horizontalSlider");
         horizontalSlider->setGeometry(QRect(720, 470, 311, 20));
+        horizontalSlider->setMouseTracking(true);
+        horizontalSlider->setMinimum(0);
+        horizontalSlider->setMaximum(4);
+        horizontalSlider->setValue(0);
+        horizontalSlider->setTracking(true);
         horizontalSlider->setOrientation(Qt::Horizontal);
+        horizontalSlider->setTickPosition(QSlider::TicksBelow);
+        horizontalSlider->setTickInterval(1);
         label_3 = new QLabel(Integration);
         label_3->setObjectName("label_3");
         label_3->setGeometry(QRect(630, 470, 101, 16));

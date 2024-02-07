@@ -1,4 +1,6 @@
 QT       += core gui
+QT += widgets
+
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -39,3 +41,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 DISTFILES += \
     ../../../../Downloads/splash.png \
     splash.png
+
+QMAKE_CXXFLAGS += -O3
+QMAKE_CFLAGS += -O3

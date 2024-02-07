@@ -41,6 +41,10 @@ MainWindow::MainWindow(QWidget *parent)
     connect(aboutAction, &QAction::triggered, this, &MainWindow::about);
     connect(lightModeAction, &QAction::triggered, this, &MainWindow::lightMode);
     connect(darkModeAction, &QAction::triggered, this, &MainWindow::darkMode);
+    connect(ui->ThreadNum, SIGNAL(valueChanged(int)), this, SLOT(updateLabel(int)));
+
+
+
 
     // Add the actions to the menu bar
     QMenu *settingsMenu = menuBar()->addMenu("Settings");
@@ -139,8 +143,10 @@ void MainWindow::NumPressed(){
         numDim = 0;
     } else if (butVal == "yˣ") {
         displayVal += "(y)^(x)";
+    } else if (butVal == "π") {
+        displayVal += "pi";
     } else if (butVal == "logₓ(y)") {
-        displayVal += "log(x)(y)";
+        displayVal += "log(y)/log(x)";
     } else if (butVal == "√x") {
         displayVal += "sqrt(x)";
     } else if (butVal == "eˣ") {
@@ -151,11 +157,17 @@ void MainWindow::NumPressed(){
         displayVal += "asin(x)";
     } else if (butVal == "cos⁻¹(x)") {
         displayVal += "acos(x)";
+    } else if (butVal == "ln(x)") {
+        displayVal += "log(x)";
     } else {
         displayVal += butVal;
     }
 
     ui->Display->setText(displayVal);
+}
+void MainWindow::updateLabel(int value)
+{
+    ui->ThreadNumL->setText(QString::number(value));
 }
 
 

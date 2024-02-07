@@ -34,5 +34,6 @@ private slots:
     void darkMode();
     void about();
     void toggleLog();
+    void updateLabel(int value);
 };
 #endif // MAINWINDOW_H

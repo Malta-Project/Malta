@@ -41,9 +41,14 @@
     <rect>
      <x>30</x>
      <y>40</y>
-     <width>231</width>
+     <width>511</width>
      <height>21</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Ubuntu Mono</family>
+    </font>
    </property>
    <property name="text">
     <string>TextLabel</string>
@@ -94,8 +99,29 @@
      <height>20</height>
     </rect>
    </property>
+   <property name="mouseTracking">
+    <bool>true</bool>
+   </property>
+   <property name="minimum">
+    <number>0</number>
+   </property>
+   <property name="maximum">
+    <number>4</number>
+   </property>
+   <property name="value">
+    <number>0</number>
+   </property>
+   <property name="tracking">
+    <bool>true</bool>
+   </property>
    <property name="orientation">
     <enum>Qt::Horizontal</enum>
+   </property>
+   <property name="tickPosition">
+    <enum>QSlider::TicksBelow</enum>
+   </property>
+   <property name="tickInterval">
+    <number>1</number>
    </property>
   </widget>
   <widget class="QLabel" name="label_3">

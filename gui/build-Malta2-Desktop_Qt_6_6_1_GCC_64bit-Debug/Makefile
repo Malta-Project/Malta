@@ -15,8 +15,8 @@ EQ            = =
 CC            = gcc
 CXX           = g++
 DEFINES       = -DQT_QML_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
-CFLAGS        = -pipe -g -Wall -Wextra -fPIC -D_REENTRANT $(DEFINES)
-CXXFLAGS      = -pipe -g -std=gnu++1z -Wall -Wextra -fPIC -D_REENTRANT $(DEFINES)
+CFLAGS        = -pipe -O3 -g -Wall -Wextra -fPIC -D_REENTRANT $(DEFINES)
+CXXFLAGS      = -pipe -O3 -g -std=gnu++1z -Wall -Wextra -fPIC -D_REENTRANT $(DEFINES)
 INCPATH       = -I../Malta2 -I. -I../../../../Qt/6.6.1/gcc_64/include -I../../../../Qt/6.6.1/gcc_64/include/QtWidgets -I../../../../Qt/6.6.1/gcc_64/include/QtGui -I../../../../Qt/6.6.1/gcc_64/include/QtCore -I. -I. -I../../../../Qt/6.6.1/gcc_64/mkspecs/linux-g++
 QMAKE         = /home/luxdragon/Qt/6.6.1/gcc_64/bin/qmake
 DEL_FILE      = rm -f
@@ -636,7 +636,7 @@ compiler_moc_predefs_make_all: moc_predefs.h
 compiler_moc_predefs_clean:
 	-$(DEL_FILE) moc_predefs.h
 moc_predefs.h: ../../../../Qt/6.6.1/gcc_64/mkspecs/features/data/dummy.cpp
-	g++ -pipe -g -std=gnu++1z -Wall -Wextra -fPIC -dM -E -o moc_predefs.h ../../../../Qt/6.6.1/gcc_64/mkspecs/features/data/dummy.cpp
+	g++ -pipe -O3 -g -std=gnu++1z -Wall -Wextra -fPIC -dM -E -o moc_predefs.h ../../../../Qt/6.6.1/gcc_64/mkspecs/features/data/dummy.cpp
 
 compiler_moc_header_make_all: moc_about.cpp moc_integration.cpp moc_mainwindow.cpp
 compiler_moc_header_clean:
@@ -1579,7 +1579,152 @@ integration.o: ../Malta2/integration.cpp ../Malta2/integration.h \
 		../../../../Qt/6.6.1/gcc_64/include/QtGui/qtextcursor.h \
 		../../../../Qt/6.6.1/gcc_64/include/QtGui/qtextformat.h \
 		../../src/malta.h \
-		../../../../Qt/6.6.1/gcc_64/include/QtGui/QPixmap
+		../../../../Qt/6.6.1/gcc_64/include/QtGui/QPixmap \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/QRegularExpression \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qregularexpression.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/QTextStream \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/QString \
+		../../../../Qt/6.6.1/gcc_64/include/QtConcurrent/QtConcurrent \
+		../../../../Qt/6.6.1/gcc_64/include/QtConcurrent/QtConcurrentDepends \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/QtCore \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/QtCoreDepends \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/q20algorithm.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/q20chrono.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/q20iterator.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/q23functional.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qabstractanimation.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qabstracteventdispatcher.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qabstractitemmodel.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qabstractnativeeventfilter.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qabstractproxymodel.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qanimationgroup.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qapplicationstatic.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/QMutex \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qassociativeiterable.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qbasictimer.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qbitarray.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qbuffer.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qbytearraymatcher.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qcache.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qcalendar.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qcborarray.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qcborvalue.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qdatetime.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qcborcommon.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/quuid.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qendian.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qcbormap.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qcborstream.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qcborstreamreader.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qcborstreamwriter.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qcollator.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qcommandlineoption.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qcommandlineparser.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qconcatenatetablesproxymodel.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qcryptographichash.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qdir.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qfile.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qfiledevice.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qfileinfo.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qtimezone.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qdiriterator.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qeasingcurve.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qfactoryinterface.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qfileselector.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/QStringList \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qfilesystemwatcher.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qfuturesynchronizer.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qfuturewatcher.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qidentityproxymodel.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qitemselectionmodel.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qjsonarray.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qjsonvalue.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qjsondocument.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qjsonobject.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qlatin1stringmatcher.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qlibrary.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qlibraryinfo.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qversionnumber.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qlockfile.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qloggingcategory.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qmessageauthenticationcode.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qmetaobject.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qmimedata.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qmimedatabase.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qmimetype.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qobjectcleanuphandler.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qoperatingsystemversion.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qparallelanimationgroup.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qpauseanimation.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qpermissions.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qplugin.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qpluginloader.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qprocess.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qproperty.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qpropertyprivate.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qpropertyanimation.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qvariantanimation.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qqueue.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qrandom.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qreadwritelock.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qresource.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qsavefile.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qscopedvaluerollback.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qsemaphore.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qsequentialanimationgroup.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qsequentialiterable.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qsettings.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qsharedmemory.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qtipccommon.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qsignalmapper.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qsimd.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qsocketnotifier.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qsortfilterproxymodel.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qstack.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qstandardpaths.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qstorageinfo.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qstringconverter.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qstringlistmodel.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qsystemsemaphore.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qtcoreversion.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qtemporarydir.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qtemporaryfile.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qtextboundaryfinder.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qthreadstorage.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qtimeline.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qtimer.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qtranslator.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qtransposeproxymodel.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qurlquery.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qvarianthash.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/QHash \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qvariantlist.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qvariantmap.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/QMap \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qvector.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qwaitcondition.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/QDeadlineTimer \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qwineventnotifier.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qxmlstream.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/qxpfunctional.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtConcurrent/qtaskbuilder.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtConcurrent/qtconcurrentstoredfunctioncall.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtConcurrent/qtconcurrent_global.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtConcurrent/qtconcurrentexports.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtConcurrent/qtconcurrentrunbase.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtConcurrent/qtconcurrentcompilertest.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtConcurrent/qtconcurrentfilter.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtConcurrent/qtconcurrentfilterkernel.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtConcurrent/qtconcurrentiteratekernel.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtConcurrent/qtconcurrentmedian.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtConcurrent/qtconcurrentthreadengine.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtConcurrent/qtconcurrentmapkernel.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtConcurrent/qtconcurrentreducekernel.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtConcurrent/qtconcurrentfunctionwrappers.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtConcurrent/qtconcurrentmap.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtConcurrent/qtconcurrentrun.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtConcurrent/qtconcurrenttask.h \
+		../../../../Qt/6.6.1/gcc_64/include/QtConcurrent/qtconcurrentversion.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o integration.o ../Malta2/integration.cpp
 
 main.o: ../Malta2/main.cpp ../Malta2/mainwindow.h \
@@ -2010,7 +2155,8 @@ mainwindow.o: ../Malta2/mainwindow.cpp ../Malta2/mainwindow.h \
 		../../../../Qt/6.6.1/gcc_64/include/QtWidgets/qlayout.h \
 		../../../../Qt/6.6.1/gcc_64/include/QtWidgets/qlayoutitem.h \
 		../../../../Qt/6.6.1/gcc_64/include/QtWidgets/qgridlayout.h \
-		../../../../Qt/6.6.1/gcc_64/include/QtCore/QRegularExpression
+		../../../../Qt/6.6.1/gcc_64/include/QtCore/QRegularExpression \
+		../../../../Qt/6.6.1/gcc_64/include/QtGui/QCursor
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../Malta2/mainwindow.cpp
 
 malta.o: ../../src/malta.cpp ../../src/malta.h \

@@ -63,6 +63,7 @@ public:
     QPushButton *button_0;
     QLabel *label_5;
     QLabel *label_6;
+    QLabel *ThreadNumL;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -475,6 +476,9 @@ public:
         label_6 = new QLabel(centralwidget);
         label_6->setObjectName("label_6");
         label_6->setGeometry(QRect(450, 80, 331, 131));
+        ThreadNumL = new QLabel(centralwidget);
+        ThreadNumL->setObjectName("ThreadNumL");
+        ThreadNumL->setGeometry(QRect(670, 500, 58, 15));
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName("menubar");
@@ -523,6 +527,7 @@ public:
         button_0->setText(QCoreApplication::translate("MainWindow", "Integrate!", nullptr));
         label_5->setText(QString());
         label_6->setText(QCoreApplication::translate("MainWindow", "<html><head/><body><p><span style=\" font-size:72pt; font-weight:700;\">Malta</span></p></body></html>", nullptr));
+        ThreadNumL->setText(QCoreApplication::translate("MainWindow", "1", nullptr));
     } // retranslateUi
 
 };
