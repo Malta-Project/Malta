@@ -28,3 +28,19 @@ int Math::get_random_point(int lower_limit, int upper_limit) { //limts inclusive
 double Math::abs(double x) {
     return x < 0 ? -x : x;
 }
+
+double Math::max(double x, double y) {
+    return x > y ? x : y;
+}
+
+double Math::min(double x, double y) {
+    return x < y ? x : y;
+}
+
+int Math::max(int x, int y) {
+    return x > y ? x : y;
+}
+
+int Math::min(int x, int y) {
+    return x < y ? x : y;
+}
