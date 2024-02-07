@@ -22,6 +22,7 @@ class Malta {
         double get_integration_time_ms();
         void set_threads(int n_threads);
         int get_threads();
+        double get_chi2();
     private:
         bool log;
         int dimensions;

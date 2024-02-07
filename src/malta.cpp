@@ -269,6 +269,10 @@ double Malta::get_integration_time_ms() {
     return this->integration_time_ms;
 }
 
+double Malta::get_chi2() {
+    return this->chi_2_dof[this->i_iteration];
+}
+
 void Malta::set_threads(int n_threads) {
     this->n_threads = n_threads;
 }
