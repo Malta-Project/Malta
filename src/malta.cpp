@@ -74,34 +74,48 @@ double Malta::integrate(IntgFn integrand, std::vector<std::pair<double, double>>
 
 void Malta::calculate_mij() {
     vec2d f_ij(this->dimensions, vec1d(this->N_intervals));
-    std::vector<int> selected_points = std::vector<int>();
-    double sum_1, prd_2, sum_3, sum_4, norm_val, m_ij, avg_m_ij;
+    double norm_val, m_ij, avg_m_ij;
+    std::vector<std::pair<int, int>> N_intervals_thread(this->N_intervals);
+    for(int i=0; i<this->n_threads; i++) {
+        N_intervals_thread[i] = {i*this->N_intervals/this->n_threads, (i+1)*this->N_intervals/this->n_threads};
+    }
+    N_intervals_thread[this->n_threads-1].second = this->N_intervals;    
+    std::vector<std::thread> threads(this->n_threads);
     for(int i=0; i<this->dimensions; i++) {
-        for(int j=0; j<this->N_intervals; j++) {
-            selected_points.clear();
-            for(int k=0; k<this->N_points; k++) {
-                if(this->points_x[k][i] < this->intervals[i][j+1] && this->points_x[k][i] >= this->intervals[i][j]) {
-                    selected_points.push_back(k);
+        for(int t=0; t<this->n_threads; t++) {            
+            threads[t] = std::thread([&N_intervals_thread, t, i, N_points=this->N_points, dimensions=this->dimensions, &f_ij=f_ij,
+                                      &points_x=this->points_x, &intervals=this->intervals, &p_ij_inv=this->p_ij_inv, &function_values=this->function_values]() {
+                double sum_1, prd_2, sum_3, sum_4;
+                for(int j=N_intervals_thread[t].first; j<N_intervals_thread[t].second; j++) {
+                    std::vector<int> selected_points = std::vector<int>();
+                    for(int k=0; k<N_points; k++) {
+                        if(points_x[k][i] < intervals[i][j+1] && points_x[k][i] >= intervals[i][j]) {
+                            selected_points.push_back(k);
+                        }
+                    }
+                    sum_1 = 0;
+                    for(auto &k : selected_points) {
+                        sum_4 = 0;
+                        for(int l=0; l<dimensions; l++) {
+                            sum_4 += p_ij_inv[l][k] * p_ij_inv[l][k];
+                        }
+                        sum_1 += function_values[k] * function_values[k] / sum_4;
+                    }
+                    prd_2 = 1;
+                    for(int l=0; l<dimensions; l++) {
+                        sum_3 = 0;
+                        for(auto &k : selected_points) {
+                            sum_3 += p_ij_inv[l][k] * p_ij_inv[l][k];
+                        }
+                        prd_2 *= sum_3;
+                    }
+                    sum_1 *= prd_2;
+                    f_ij[i][j] = std::sqrt(sum_1);
                 }
-            }
-            sum_1 = 0;
-            for(auto &k : selected_points) {
-                sum_4 = 0;
-                for(int l=0; l<this->dimensions; l++) {
-                    sum_4 += this->p_ij_inv[l][k] * this->p_ij_inv[l][k];
-                }
-                sum_1 += this->function_values[k] * this->function_values[k] / sum_4;
-            }
-            prd_2 = 1;
-            for(int l=0; l<this->dimensions; l++) {
-                sum_3 = 0;
-                for(auto &k : selected_points) {
-                    sum_3 += this->p_ij_inv[l][k] * this->p_ij_inv[l][k];
-                }
-                prd_2 *= sum_3;
-            }
-            sum_1 *= prd_2;
-            f_ij[i][j] = std::sqrt(sum_1);
+            });
+        }        
+        for(int t=0; t<this->n_threads; t++) {
+            threads[t].join();
         }
         norm_val = 0;
         for(int j=0; j<this->N_intervals; j++) {
@@ -182,42 +196,24 @@ void Malta::calculate_errors() {
 }
 
 void Malta::sample_points(IntgFn integrand) {
-    std::vector<std::pair<int, int>> N_points_thread(this->n_threads);
-    for(int i=0; i<this->n_threads; i++) {
-        N_points_thread[i] = {i*this->N_points/this->n_threads, (i+1)*this->N_points/this->n_threads};
+    double y;
+    int interval_ix;
+    std::vector<int> *interval_ixs = new std::vector<int>(this->dimensions);
+    double p_x;
+    for(int i=0; i<this->N_points; i++) {
+        p_x = 1;
+        interval_ixs = Math::get_random_points(0, this->N_intervals-1, this->dimensions);
+        for(int j=0; j<this->dimensions; j++) {
+            interval_ix = (*interval_ixs)[j];
+            this->p_ij_inv[j][i] = this->N_intervals * this->dx_ij[j][interval_ix];
+            p_x /= this->p_ij_inv[j][i];
+            this->points_x[i][j] = Math::get_random_point(this->intervals[j][interval_ix], this->intervals[j][interval_ix+1]);
+        }
+        this->p_x[i] = p_x;
+        y = integrand(points_x[i]);
+        this->function_values[i] = y;
     }
-    N_points_thread[this->n_threads-1].second = this->N_points;
-    std::vector<std::thread> threads(this->n_threads);
-    int N_intervals = this->N_intervals,
-        dimensions = this->dimensions;
-    for(int t=0; t<this->n_threads; t++) {
-        threads[t] = std::thread([N_points_thread, t, N_intervals, dimensions, integrand,
-                                  &p_x=this->p_x,
-                                  &function_values=this->function_values,
-                                  &dx_ij=this->dx_ij,
-                                  &intervals=this->intervals,
-                                  &p_ij_inv=this->p_ij_inv,
-                                  &points_x=this->points_x]() {
-            std::vector<int> *interval_ixs = new std::vector<int>(dimensions);
-            for(int i=N_points_thread[t].first; i<N_points_thread[t].second; i++) {
-                double p_x_loc = 1;
-                int interval_ix;
-                interval_ixs = Math::get_random_points(0, N_intervals-1, dimensions);
-                for(int j=0; j<dimensions; j++) {
-                    interval_ix = (*interval_ixs)[j];
-                    p_ij_inv[j][i] = N_intervals * dx_ij[j][interval_ix];
-                    p_x_loc /= p_ij_inv[j][i];
-                    points_x[i][j] = Math::get_random_point(intervals[j][interval_ix], intervals[j][interval_ix+1]);
-                }
-                p_x[i] = p_x_loc;
-                function_values[i] = integrand(points_x[i]);
-            }
-            delete interval_ixs;
-        });
-    }
-    for(int i=0; i<this->n_threads; i++) {
-        threads[i].join();
-    }
+    delete interval_ixs;
 }
 
 
