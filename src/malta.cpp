@@ -276,7 +276,7 @@ double Malta::get_integration_time_ms() {
 }
 
 double Malta::get_chi2() {
-    return this->chi_2_dof[this->i_iteration];
+    return this->chi_2_dof[this->i_iteration-1];
 }
 
 void Malta::set_threads(int n_threads) {
@@ -285,4 +285,23 @@ void Malta::set_threads(int n_threads) {
 
 int Malta::get_threads() {
     return this->n_threads;
+}
+
+std::vector<double> Malta::get_points(int dimension) {
+    std::vector<double> points;
+    for(int i = 0; i < this->N_points; ++i) {
+        points.push_back(this->points_x[i][dimension]);
+    }
+    return points;
+}
+std::vector<double> Malta::get_intervals(int dimension) {
+    return this->intervals[dimension];
+}
+
+int Malta::get_N_iterations() {
+    return this->max_iterations;
+}
+
+void Malta::set_N_iterations(int N_iterations) {
+    this->max_iterations = N_iterations;
 }

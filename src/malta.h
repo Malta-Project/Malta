@@ -9,11 +9,13 @@ using vec2d = std::vector<std::vector<double>>;
 using vec1d = std::vector<double>;
 class Malta {
     public:
-        Malta(int dimensions, int N_points, int N_intervals, int max_iterations, bool log=true, int n_threads=8);
+        Malta(int dimensions, int N_points, int N_intervals, int N_iterations, bool log=true, int n_threads=8);
         double integrate(IntgFn integrand);
         double integrate(IntgFn integrand, std::vector<std::pair<double, double>> limits);
         void set_N_intervals(int N_intervals);
         int get_N_intervals();
+        void set_N_iterations(int N_iterations);
+        int get_N_iterations();
         void set_N_points(int N_points);
         int get_N_points();
         void set_seed(int seed);
@@ -23,6 +25,8 @@ class Malta {
         void set_threads(int n_threads);
         int get_threads();
         double get_chi2();
+        std::vector<double> get_points(int dimension);
+        std::vector<double> get_intervals(int dimension);
     private:
         bool log;
         int dimensions;
