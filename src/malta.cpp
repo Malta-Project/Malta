@@ -297,3 +297,11 @@ std::vector<double> Malta::get_points(int dimension) {
 std::vector<double> Malta::get_intervals(int dimension) {
     return this->intervals[dimension];
 }
+
+int Malta::get_N_iterations() {
+    return this->max_iterations;
+}
+
+void Malta::set_N_iterations(int N_iterations) {
+    this->max_iterations = N_iterations;
+}
