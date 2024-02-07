@@ -81,7 +81,7 @@ double integrand(vector<double> x) {
     double alphas = 0.118;
     double GS = sqrt(alphas*4*pi);
 
-    double integrand_val = -(1/z) * (z_min/(x1*z)) * (pT/(16*pow(pi, 2)*s_tt))
+    double integrand_val = (1/z) * (z_min/(x1*z)) * (pT/(16*pow(pi, 2)*s_tt))
                            * sqrt(kaellen(s_tt, m2, m2)/kaellen(s, s_tt, pow(mT_j, 2)))
                            * (K_a1a2/(4*pi*s)) * matrix_element_top(S_, T, U, T14, T24, S34, MT, GS, Nc);
 
@@ -123,7 +123,7 @@ double integrand_transformed(std::vector<double> x) { //integrand is jacobi-tran
 }
 
 int main() {
-    Malta malta = Malta(6, 1e5, 500, 200);
+    Malta malta = Malta(6, 5e4, 1000, 200);
     malta.set_threads(8);
     malta.integrate(integrand_transformed);
     cout << "result I=" << malta.get_result() << endl;
