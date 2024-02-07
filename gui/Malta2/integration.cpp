@@ -230,7 +230,7 @@ double Integration::integrand(std::vector<double> v) {
     typedef exprtk::expression<double>     expression_t;
     typedef exprtk::parser<double>             parser_t;
 
-    qDebug() << "arg before everythin: " << arg;
+    //qDebug() << "arg before everythin: " << arg;
     QString arg_new = arg;
     arg_new.replace(QRegularExpression("\\be\\b"), QString::number(2.718281));
     arg_new.replace(QRegularExpression("\\bpi\\b"), QString::number(3.141593));
@@ -264,7 +264,7 @@ double Integration::integrand(std::vector<double> v) {
 
 
     // Convert the QString to a std::string
-    qDebug() << "arg before conversion: " << arg_new;
+    //qDebug() << "arg before conversion: " << arg_new;
     std::string expression_string = arg_new.toStdString();
 
 
