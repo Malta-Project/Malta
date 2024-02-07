@@ -16,7 +16,7 @@ double integrand(std::vector<double> x) {
 }
 
 int main() {
-    Malta malta = Malta(2, 1e4, 30, 20, false);
+    Malta malta = Malta(2, 1e4, 20, 20, false);
     malta.set_threads(8);
 
     std::string mode = "threads";
@@ -37,7 +37,7 @@ int main() {
             }
         }
         outputFile.close();
-        malta.set_N_intervals(30);
+        malta.set_N_intervals(20);
     } else if (mode == "points") {
         int n_tests = 50;
         std::ofstream outputFile("benchmarks/test_points.txt");
@@ -53,9 +53,9 @@ int main() {
         outputFile.close();
         malta.set_N_points(1e4);
     } else if (mode == "threads") {
-        malta.set_N_points(1e5);
-        //malta.set_N_iterations(50);
-        int n_tests = 100;
+        malta.set_N_points(1e4);
+        malta.set_N_iterations(40);
+        int n_tests = 50;
         std::ofstream outputFile("benchmarks/test_threads.txt");
         int n_vals_threads = 16;
         std::vector<int> values_threads(n_vals_threads);
