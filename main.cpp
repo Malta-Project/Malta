@@ -2,8 +2,9 @@
 #define MAIN_CPP
 
 #include <iostream>
-#include "src/malta.h"
 #include <cmath>
+#include <iomanip>
+#include "src/malta.h"
 
 using namespace std;
 
@@ -15,7 +16,7 @@ int main() {
     Malta malta = Malta(2, 10000, 30, 50);
     malta.set_threads(8);
     malta.integrate(integrand, {{0.0, 2.0}, {1.0, 4.0}});
-    cout << "result I=" << malta.get_result() << endl;
+    cout << "result I=" <<  std::setprecision(15) << malta.get_result() << endl;
     cout << "error sigma=" << malta.get_error() << endl;
     std::cout << "time = " << malta.get_integration_time_ms() << " [ms]" << std::endl;
     return 0;
