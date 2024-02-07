@@ -7,14 +7,13 @@
 
 using namespace std;
 
-// g++ -I ./src main.cpp ./src/math.cpp ./src/malta.cpp -o malta
-
 double integrand(std::vector<double> x) {
     return std::sqrt(std::pow(x[0], 3) + std::pow(x[1], 2));
 }
 
 int main() {
-    Malta malta = Malta(2, 1000, 100, 100);
+    Malta malta = Malta(2, 100000, 20, 20);
+    malta.set_threads(16);
     malta.integrate(integrand, {{0.0, 2.0}, {1.0, 4.0}});
     cout << "result I=" << malta.get_result() << endl;
     cout << "error sigma=" << malta.get_error() << endl;
