@@ -28,7 +28,7 @@ int Integration::numDim = 1;
 
 
 std::vector<std::pair<double, double>> extractLimits(QString& str) {
-    QRegularExpression re("int\\((\\d+\\.?\\d*)\\)\\((\\d+\\.?\\d*)\\)d(\\w)");
+    QRegularExpression re("int\\((-?\\d+\\.?\\d*)\\)\\((-?\\d+\\.?\\d*)\\)d(\\w)");
     QRegularExpressionMatchIterator i = re.globalMatch(str);
     std::map<QString, std::pair<double, double>> limitsMap;
 
