@@ -35,3 +35,6 @@ test.ipynb
 
 .vscode
 *.bat
+
+regex.py
+pseudocode.md
