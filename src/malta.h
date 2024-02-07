@@ -23,6 +23,8 @@ class Malta {
         void set_threads(int n_threads);
         int get_threads();
         double get_chi2();
+        std::vector<double> get_points(int dimension);
+        std::vector<double> get_intervals(int dimension);
     private:
         bool log;
         int dimensions;
