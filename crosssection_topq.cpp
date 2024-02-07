@@ -2,7 +2,6 @@
 #define MAIN_CPP
 
 #include <iostream>
-#include <chrono>
 #include <cmath>
 #include <math.h>
 #include "src/malta.h"
@@ -124,13 +123,12 @@ double integrand_transformed(std::vector<double> x) { //integrand is jacobi-tran
 }
 
 int main() {
-    Malta malta = Malta(6, 100000, 200, 30);
-    chrono::steady_clock::time_point begin = chrono::steady_clock::now();
+    Malta malta = Malta(6, 1e5, 500, 200);
+    malta.set_threads(8);
     malta.integrate(integrand_transformed);
-    chrono::steady_clock::time_point end = chrono::steady_clock::now();
-    cout << "the result is I = " << malta.get_result() << endl;
-    cout << "the error is sigma = " << malta.get_error() << endl;
-    cout << "Integration time = " << chrono::duration_cast<chrono::milliseconds>(end - begin).count() << " [ms]" << std::endl;
+    cout << "result I=" << malta.get_result() << endl;
+    cout << "error sigma=" << malta.get_error() << endl;
+    std::cout << "time = " << malta.get_integration_time_ms() << " [ms]" << std::endl;
     return 0;
 }
 

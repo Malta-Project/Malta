@@ -50,7 +50,12 @@ double Malta::integrate(IntgFn integrand) {
         this->sample_points();
         this->calculate_integral(integrand);
         this->calculate_errors();
-        if(this->log) std::cout << "it=" << i << "; X^2/dof: " << this->chi_2_dof[i-1] << "; std=" << this->sigma_iterations[i] << "; I=" << this->integral_result[i] << std::endl;
+        if(this->log) {
+            std::cout << std::left << "it=" << std::setw(3) << i 
+                << "; X^2/dof: " << std::setw(9) << this->chi_2_dof[i-1]
+                << "; std=" << std::setw(9) << this->sigma_iterations[i]
+                << "; I=" << std::setw(9) << this->integral_result[i] << std::endl;
+        } 
     }
     std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
     this->integration_time_ms = std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count();    
@@ -258,7 +263,7 @@ int Malta::get_N_intervals() {
 }
 
 double Malta::get_result() {
-    return this->integral_iterations[this->i_iteration];
+    return this->integral_result[this->i_iteration];
 }
 
 double Malta::get_error() {

@@ -12,7 +12,7 @@ double integrand(std::vector<double> x) {
 }
 
 int main() {
-    Malta malta = Malta(2, 1000000, 20, 20);
+    Malta malta = Malta(2, 10000, 30, 50);
     malta.set_threads(8);
     malta.integrate(integrand, {{0.0, 2.0}, {1.0, 4.0}});
     cout << "result I=" << malta.get_result() << endl;
