@@ -5,6 +5,8 @@
 #include <bits/stdc++.h>
 #include <chrono>
 #include <thread>
+#include <boost/thread.hpp>
+//#include "mingw.thread.h"
 #include "malta.h"
 #include "malta_math.h"
 
