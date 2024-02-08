@@ -123,7 +123,7 @@ double integrand_transformed(std::vector<double> x) { //integrand is jacobi-tran
 }
 
 int main() {
-    Malta malta = Malta(6, 5e4, 1000, 200);
+    Malta malta = Malta(6, 2e6, 7e4, 200);
     malta.set_threads(8);
     malta.integrate(integrand_transformed);
     cout << "result I=" << malta.get_result() << endl;
